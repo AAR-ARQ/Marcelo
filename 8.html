@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicionário dos Mestres: Glossário</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Variáveis de Cores e Fontes */
+        :root {
+            --aa-green: #16B097;
+            --aa-dark-blue: #1C2E42;
+            --aa-light-gray: #AEB0B2;
+            --aa-medium-gray: #6c7a89;
+            --aa-white: #FFFFFF;
+            --aa-black: #000000;
+            --aa-green-darker: #0F8A7E;
+            --aa-green-text-dark-theme: #2DD4BF;
+            --aa-green-lighter: #D2F3EC;
+            --aa-green-pastel: #f0fdfa;
+            --aa-dark-blue-lighter: #2C4A6B;
+            --arremaq-orange: #FF8C00;
+            --arremaq-orange-darker: #D97706;
+            --arremaq-orange-text-dark-theme: #FDBA74;
+            --arremaq-orange-lighter: #FFD073;
+            --arremaq-orange-pastel: #fffbeb;
+            --arremaq-orange-darkest: #6b3e00;
+            --aa-green-darkest: #17575c;
+            --aa-shiny-gray-light: #E5E7EB;
+            --aa-shiny-gray-dark: #374151;
+            --font-headings-cover: 'Manrope', sans-serif;
+            --font-body-cover: 'Manrope', sans-serif;
+            --font-primary-portal: 'Manrope', sans-serif;
+            --font-headings-portal: 'Sora', sans-serif;
+            --bg-main-light: var(--aa-green-pastel);
+            --bg-main-dark: #0a121c;
+            --bg-content-light-portal: var(--aa-white);
+            --bg-content-dark-portal: #1e293b;
+            --bg-cards-section-light: #f0f4f8;
+            --bg-cards-section-dark: #111827;
+            --text-headings-light-portal: var(--aa-dark-blue);
+            --text-headings-dark-portal: var(--aa-green-lighter);
+            --text-body-light-portal: #334155;
+            --text-body-dark-portal: #cbd5e1;
+            --text-muted-light-portal: #616161;
+            --text-muted-dark-portal: #94a3b8;
+            --border-color-light-portal: #e2e8f0;
+            --border-color-dark-portal: #334155;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+            --radius-card-portal: 1.25rem;
+            --radius-button-portal: 0.75rem;
+            --radius-round: 9999px;
+            --transition-main: .25s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* Estilos Globais */
+        html { scroll-behavior: smooth; font-family: var(--font-body-cover); font-size: 91%; }
+        body { margin: 0; font-family: var(--font-body-cover); background-color: var(--bg-main-light); color: var(--text-body-light-portal); overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; line-height: 1.7; }
+        html[data-theme='dark'] body { background-color: var(--bg-main-dark); color: var(--text-body-dark-portal); }
+        .hidden { display: none !important; }
+        .emoji-original-color { -webkit-text-fill-color: initial; text-fill-color: initial; background: none; display: inline-block; text-shadow: none; }
+        .text-aa-green-darker { color: var(--aa-green-darker) !important; -webkit-text-fill-color: var(--aa-green-darker) !important; text-fill-color: var(--aa-green-darker) !important; background: none !important; }
+        html[data-theme='dark'] .text-aa-green-darker { color: var(--aa-green-text-dark-theme) !important; -webkit-text-fill-color: var(--aa-green-text-dark-theme) !important; text-fill-color: var(--aa-green-text-dark-theme) !important; }
+        .text-arremaq-orange-darker { color: var(--arremaq-orange-darker) !important; -webkit-text-fill-color: var(--arremaq-orange-darker) !important; text-fill-color: var(--arremaq-orange-darker) !important; background: none !important; }
+        html[data-theme='dark'] .text-arremaq-orange-darker { color: var(--arremaq-orange-text-dark-theme) !important; -webkit-text-fill-color: var(--arremaq-orange-text-dark-theme) !important; text-fill-color: var(--arremaq-orange-text-dark-theme) !important; }
+
+        /* Estilos específicos da seção */
+        .playbook-sub-section { padding-top: 2rem; padding-bottom: 2rem; background-color: var(--bg-main-light); min-height: 100vh; }
+        html[data-theme='dark'] .playbook-sub-section { background-color: var(--bg-main-dark); }
+        .playbook-content-title { font-family: var(--font-headings-portal); font-size: clamp(1.5rem, 3.2vw, 2rem); font-weight: 700; color: var(--text-headings-light-portal); margin-bottom: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); text-align: center;}
+        html[data-theme='dark'] .playbook-content-title { color: var(--text-headings-dark-portal); }
+        .playbook-content-title .emoji { font-size: 1.1em; margin-right: 0.6rem; color: var(--aa-green); }
+        html[data-theme='dark'] .playbook-content-title .emoji { color: var(--aa-green-lighter); }
+        .playbook-sub-section p { margin-bottom: 1rem; line-height: 1.8; font-size: 0.85rem; color: var(--text-body-light-portal); }
+        html[data-theme='dark'] .playbook-sub-section p { color: var(--text-body-dark-portal); }
+        .navigation-buttons { display: flex; justify-content: space-between; margin-top: 3rem; }
+        .btn-nav { padding: 0.7rem 1.5rem; border-radius: var(--radius-lg); font-weight: 700; transition: all var(--transition-main); border: 2px solid transparent; text-transform: uppercase; box-shadow: var(--shadow-sm); font-size: 0.8rem; }
+        .btn-nav:hover{ box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .btn-nav.prev { background-color: var(--text-muted-light-portal); color: var(--aa-white); border-color: var(--aa-dark-blue); }
+        .btn-nav.prev:hover { background-color: var(--aa-dark-blue); }
+        html[data-theme='dark'] .btn-nav.prev { background-color: var(--text-muted-dark-portal); color: var(--bg-main-dark); border-color: var(--aa-green-lighter); }
+        html[data-theme='dark'] .btn-nav.prev:hover { background-color: var(--aa-green-lighter); color: var(--aa-dark-blue); }
+        .btn-nav.next { background-color: var(--aa-green); color: var(--aa-white); border-color: var(--aa-green-darker); }
+        .btn-nav.next:hover { background-color: var(--aa-green-darker); }
+        html[data-theme='dark'] .btn-nav.next { background-color: var(--arremaq-orange-lighter); color: var(--aa-dark-blue); border-color: var(--arremaq-orange); }
+        html[data-theme='dark'] .btn-nav.next:hover { background-color: var(--arremaq-orange); color: var(--aa-white); }
+        .btn-nav.disabled { background-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; opacity: 0.7; border-color: #cbd5e1; }
+        html[data-theme='dark'] .btn-nav.disabled { background-color: #334155; color: #64748b; border-color: #475569; }
+        
+        .btn-voltar-secao { display: inline-flex; align-items: center; font-family: var(--font-headings-cover); font-weight: 600; padding: 0.6rem 1.2rem; border-radius: var(--radius-button-portal); text-decoration: none; transition: all var(--transition-main); border: 2px solid var(--aa-green); background-color: transparent; color: var(--aa-green-darker); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; }
+        .btn-voltar-secao:hover { background-color: var(--aa-green-lighter); border-color: var(--aa-green-darker); transform: translateY(-2px); color: var(--aa-green-darker); }
+        html[data-theme='dark'] .btn-voltar-secao { border-color: var(--aa-green-lighter); color: var(--aa-green-lighter); }
+        html[data-theme='dark'] .btn-voltar-secao:hover { background-color: var(--aa-dark-blue-lighter); border-color: var(--aa-green-lighter); color: var(--aa-white); }
+        .btn-voltar-secao i { margin-right: 0.5rem; }
+
+        .theme-toggle-button { position: fixed; bottom: 20px; right: 20px; background-color: var(--bg-content-light-portal); color: var(--text-headings-light-portal); border: 1px solid var(--border-color-light-portal); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow-lg); z-index: 1000; transition: all var(--transition-main); }
+        .theme-toggle-button:hover { transform: scale(1.1); color: var(--aa-green); }
+        html[data-theme='dark'] .theme-toggle-button { background-color: var(--bg-content-dark-portal); color: var(--text-headings-dark-portal); border-color: var(--border-color-dark-portal); }
+        html[data-theme='dark'] .theme-toggle-button:hover { color: var(--aa-green-lighter); }
+        .accessibility-controls { position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1001; }
+        .accessibility-btn { background-color: var(--bg-content-light-portal); color: var(--text-headings-light-portal); border: 1px solid var(--border-color-light-portal); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow-md); transition: all var(--transition-main); }
+        .accessibility-btn:hover { transform: scale(1.1); color: var(--aa-green); }
+        html[data-theme='dark'] .accessibility-btn { background-color: var(--bg-content-dark-portal); color: var(--text-headings-dark-portal); border-color: var(--border-color-dark-portal); }
+        html[data-theme='dark'] .accessibility-btn:hover { color: var(--aa-green-lighter); }
+
+        /* Estilos do Glossário */
+        .glossary-container { display: flex; flex-direction: column; gap: 1rem; }
+        .glossary-term { padding: 1rem 1.5rem; font-family: var(--font-headings-portal); font-weight: 700; font-size: 0.95rem; color: var(--text-headings-light-portal); cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; transition: all var(--transition-main); }
+        html[data-theme='dark'] .glossary-term { color: var(--text-headings-dark-portal); }
+        .glossary-term:hover { background-color: var(--aa-green-lighter); border-radius: var(--radius-lg); color: var(--aa-dark-blue); }
+        html[data-theme='dark'] .glossary-term:hover { background-color: var(--aa-dark-blue-lighter); color: var(--aa-white); }
+        .glossary-term .emoji { margin-right: 0.75rem; font-size: 1.2em; color: var(--arremaq-orange); }
+        html[data-theme='dark'] .glossary-term .emoji { color: var(--arremaq-orange-lighter); }
+        .glossary-definition { padding: 0.5rem 1.5rem 1.5rem; font-size: 0.85rem; line-height: 1.7; color: var(--text-body-light-portal); }
+        html[data-theme='dark'] .glossary-definition { color: var(--text-body-dark-portal); }
+        .glossary-definition strong { color: var(--text-headings-light-portal); }
+        html[data-theme='dark'] .glossary-definition strong { color: var(--text-headings-dark-portal); }
+
+        .highlight { background-color: #f5f5f5; border-left-color: #9e9e9e; }
+        html[data-theme='dark'] .highlight { background-color: #212121; border-left-color: #bdbdbd; }
+        .text-gray-900 { color: #212121; }
+        html[data-theme='dark'] .text-gray-900 { color: #bdbdbd; }
+
+        /* Media Queries para Responsividade */
+        @media (max-width: 1024px) {
+            .playbook-content-title { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+            .playbook-sub-section p { font-size: 0.7rem; }
+        }
+        @media (max-width: 768px) {
+            html { font-size: 84%; }
+            .playbook-content-title { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+            .playbook-sub-section p { font-size: 0.7rem; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 77%; }
+            .playbook-content-title { font-size: clamp(1rem, 2.8vw, 1.5rem); }
+            .playbook-sub-section p { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controles de Acessibilidade -->
+    <div class="accessibility-controls">
+        <button id="increaseFontBtn" class="accessibility-btn" aria-label="Aumentar tamanho da fonte" title="Aumentar Fonte">
+            <i class="fas fa-search-plus"></i>
+        </button>
+        <button id="decreaseFontBtn" class="accessibility-btn" aria-label="Diminuir tamanho da fonte" title="Diminuir Fonte">
+            <i class="fas fa-search-minus"></i>
+        </button>
+        <button id="readPageBtn" class="accessibility-btn" aria-label="Ler página em voz alta" title="Ler Página">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+
+    <main id="main-portal-completo">
+        <!-- Conteúdo da Seção Glossário -->
+        <section id="playbook-sec-8-content-main" class="playbook-sub-section" data-aos="fade-up">
+            <div class="container mx-auto">
+                <button class="btn-voltar-secao backToManualPitStopDetalhesBtn mb-8 text-sm">
+                    <i class="fas fa-arrow-left mr-2"></i> VOLTAR AO GUIA ESTRATÉGICO
+                </button>
+                <h2 class="playbook-content-title text-center"><span class="emoji-original-color">📖</span><strong>DICIONÁRIO DOS MESTRES DA PISTA: O GLOSSÁRIO AUTO ARREMATE & ARREMAQ!</strong></h2>
+                <div class="text-content-container playbook-text space-y-10 mt-8">
+                    <section id="intro-glossario" data-aos="fade-up">
+                        <h3 class="playbook-section-title !text-center" style="text-transform: uppercase;">
+                            <span class="emoji">📚</span> <strong>FALANDO A LÍNGUA DOS CAMPEÕES: SEU MANUAL DE TERMOS DA CORRIDA!</strong>
+                        </h3>
+                        <p><span class="sentence-emoji">🏎️</span>Nobre piloto, para dominar as pistas do mercado automotivo e de máquinas pesadas, é fundamental falar a língua dos boxes e entender cada termo técnico como um verdadeiro engenheiro de equipe! <span class="sentence-emoji">🛠️</span>Este glossário é o seu "dicionário de bordo", reunindo os termos e conceitos mais importantes que você ouvirá nas garagens, nas negociações e aqui na Auto Arremate® e Arremaq®. <span class="sentence-emoji">🏆</span>Consultar este guia é como ter um conselheiro experiente sussurrando dicas no seu rádio: essencial para construir credibilidade, comunicar-se com clareza e não ficar perdido como um novato em um lugar desconhecido pela primeira vez!</p>
+                        <p><span class="sentence-emoji">🏁</span>Prepare-se para abastecer seu vocabulário e acelerar nas conversas com a confiança de quem entende cada detalhe do motor!</p>
+                    </section>
+
+                    <hr class="my-10 border-t-2 border-gray-200 dark:border-gray-700">
+
+                    <section id="glossario-termos" data-aos="fade-up">
+                        <h3 class="playbook-section-title !text-center" style="text-transform: uppercase;">
+                            <span class="emoji">🔤</span> <strong>DE A A Z: OS TERMOS QUE TODO PILOTO DE ELITE PRECISA CONHECER!</strong>
+                        </h3>
+                        <div class="glossary-container mt-6 space-y-5">
+                            <details class="interactive-section group" data-aos="fade-up">
+                                <summary class="interactive-summary-obj glossary-term">
+                                    <strong class="text-lg font-semibold text-blue-600 dark:text-blue-300"><span class="emoji text-xl">🅰️</span> Termos com A</strong>
+                                    <i class="fas fa-chevron-down text-blue-500 dark:text-blue-400 transform transition-transform duration-300 group-open:rotate-180"></i>
+                                </summary>
+                                <div class="interactive-content glossary-definition">
+                                    <p><strong>Alienação Fiduciária:</strong> É como quando você financia um carro novo e ele fica "preso" ao banco até você pagar todas as parcelas. O carro é seu para usar, mas se não pagar, o banco (o "xerife" da história) pode pegá-lo de volta. É uma garantia para quem emprestou o dinheiro.</p>
+                                    <p><strong>ARR (Annual Recurring Revenue):</strong> Receita Recorrente Anual. Para negócios com modelo de assinatura (como um serviço de streaming para veículos), é o total de dinheiro que entra todo ano dessas assinaturas. Mostra a saúde e a previsibilidade da "equipe".</p>
+                                    <p><strong>Assertividade:</strong> É a habilidade de se comunicar de forma clara, direta e confiante, defendendo seus pontos de vista com respeito, sem ser agressivo nem passivo como um veículo estacionado.</p>
+                                </div>
+                            </details>
+                            <details class="interactive-section group" data-aos="fade-up">
+                                <summary class="interactive-summary-obj glossary-term">
+                                    <strong class="text-lg font-semibold text-green-600 dark:text-green-300"><span class="emoji text-xl">🅱️</span> Termos com B</strong>
+                                     <i class="fas fa-chevron-down text-green-500 dark:text-green-400 transform transition-transform duration-300 group-open:rotate-180"></i>
+                                </summary>
+                                <div class="interactive-content glossary-definition">
+                                    <p><strong>B2B (Business-to-Business):</strong> Negócios entre "escuderias". Uma empresa vendendo para outra empresa (ex: a Auto Arremate vendendo para uma concessionária).</p>
+                                    <p><strong>B2C (Business-to-Consumer):</strong> Negócios da "escuderia" para o "fã". Uma empresa vendendo diretamente para o consumidor final (ex: uma concessionária vendendo um carro para você).</p>
+                                    <p><strong>Benchmarking:</strong> É como olhar o tempo de volta dos outros pilotos ou as estratégias de box das outras equipes para aprender e melhorar sua própria performance. Comparar para evoluir!</p>
+                                    <p><strong>Break-even Point (Ponto de Equilíbrio):</strong> É a linha de chegada onde suas receitas totais (o dinheiro que você ganhou na corrida) igualam seus custos totais (tudo que você gastou com o carro, equipe, combustível). A partir daqui, qualquer volta extra é lucro!</p>
+                                </div>
+                            </details>
+                            <details class="interactive-section group" data-aos="fade-up">
+                                <summary class="interactive-summary-obj glossary-term">
+                                    <strong class="text-lg font-semibold text-red-600 dark:text-red-300"><span class="emoji text-xl">🅲</span> Termos com C</strong>
+                                    <i class="fas fa-chevron-down text-red-500 dark:text-red-400 transform transition-transform duration-300 group-open:rotate-180"></i>
+                                </summary>
+                                <div class="interactive-content glossary-definition">
+                                    <p><strong>CAC (Custo de Aquisição de Cliente):</strong> Quanto sua equipe gastou em marketing e vendas (adesivos, comerciais, salário do vendedor) para trazer um novo fã (cliente) para sua torcida.</p>
+                                    <p><strong>Cadência:</strong> A sequência e a frequência dos seus "pit stops de comunicação" (contatos) em um fluxo de prospecção. Quantas vezes e quando você liga ou manda e-mail para um prospect.</p>
+                                    <p><strong>CNAE (Classificação Nacional de Atividades Econômicas):</strong> O "tipo de corrida" que uma empresa está oficialmente registrada para participar. Importante para saber se ela pode comprar de você no B2B.</p>
+                                    <p><strong>Cold Call:</strong> Uma ligação "na fria" para um prospect que ainda não demonstrou interesse na sua solução. É como bater na porta da garagem dele sem avisar.</p>
+                                    <p><strong>Cold Mail:</strong> Um e-mail "na fria", enviado para um prospect que não te conhece ainda. Precisa ser muito bom para não ir direto para a "caixa de peças velhas" (spam).</p>
+                                    <p><strong>Cross-selling:</strong> Vender "acessórios" para um cliente que já comprou o "produto principal". Ex: Se ele comprou um veículo, oferecer seguro ou um jogo de rodas esportivas.</p>
+                                    <p><strong>CRM (Customer Relationship Management):</strong> O "computador de bordo" da sua equipe de vendas. Software para gerenciar o relacionamento com o cliente, registrando todas as conversas, dados e histórico de interações.</p>
+                                    <p><strong>CTA (Call to Action - Chamada para Ação):</strong> A bandeirada final que você dá para o prospect. Instrução clara para ele realizar uma ação desejada (ex: "Clique aqui para um test drive!", "Agende seu pit stop estratégico!").</p>
+                                    <p><strong>Churn Rate (Taxa de Abandono):</strong> A porcentagem de "fãs" (clientes) que deixaram sua equipe ou cancelaram a assinatura em um certo período. Quanto menor, melhor, significa que seus fãs são leais!</p>
+                                </div>
+                            </details>
+                             <details class="interactive-section group" data-aos="fade-up">
+                                <summary class="interactive-summary-obj glossary-term">
+                                    <strong class="text-lg font-semibold text-purple-600 dark:text-purple-300"><span class="emoji text-xl">🅿️</span> Termos com P</strong>
+                                    <i class="fas fa-chevron-down text-purple-500 dark:text-purple-400 transform transition-transform duration-300 group-open:rotate-180"></i>
+                                </summary>
+                                <div class="interactive-content glossary-definition">
+                                    <p><strong>PDGC (Precificação, Divulgação, Gestão, Comercialização):</strong> Os quatro pilares do motor da Auto Arremate, representando as frentes de atuação da nossa plataforma para garantir a vitória dos nossos parceiros.</p>
+                                    <p><strong>Persona:</strong> O "avatar" do seu cliente ideal. Uma representação semi-fictícia, baseada em dados, para ajudar a entender quem ele é, o que ele quer e como se comunicar com ele.</p>
+                                    <p><strong>Pipeline de Vendas (Funil de Vendas):</strong> O "mapa da pista" do seu processo de vendas, mostrando todas as etapas desde o primeiro contato (a largada) até o fechamento do negócio (a bandeirada final).</p>
+                                    <p><strong>Pitch de Vendas:</strong> Sua "volta de apresentação" rápida e persuasiva sobre seu produto ou serviço.</p>
+                                    <p><strong>Prospect:</strong> Um "piloto promissor". Potencial cliente que se encaixa no perfil ideal (ICP) e demonstrou algum nível de interesse em interagir com sua equipe.</p>
+                                </div>
+                            </details>
+                             <details class="interactive-section group" data-aos="fade-up">
+                                <summary class="interactive-summary-obj glossary-term">
+                                    <strong class="text-lg font-semibold text-orange-600 dark:text-orange-300"><span class="emoji text-xl">🆁</span> Termos com R</strong>
+                                    <i class="fas fa-chevron-down text-orange-500 dark:text-orange-400 transform transition-transform duration-300 group-open:rotate-180"></i>
+                                </summary>
+                                <div class="interactive-content glossary-definition">
+                                    <p><strong>RaioX (Auto Arremate):</strong> Nossa ferramenta de inspeção digital de veículos, que vê através da lataria como um raio-x, mostrando todos os detalhes do "motor e chassi".</p>
+                                    <p><strong>RaioX+ (Auto Arremate):</strong> O RaioX com superpoderes! Inclui consulta de histórico veicular completo, como um dossiê detalhado sobre o passado do veículo.</p>
+                                    <p><strong>Rapport:</strong> Criar uma conexão e um relacionamento de amizade e confiança com o prospect, como a construção de uma parceria sólida. Essencial para abrir portas!</p>
+                                    <p><strong>Remarketing (Locadoras):</strong> O processo de "aposentar" os veículos da frota de locação e vendê-los para dar espaço para modelos mais novos brilharem na pista.</p>
+                                    <p><strong>Repasse (Concessionárias):</strong> O processo de vender veículos do estoque da concessionária para outros lojistas ou canais B2B, otimizando o giro e abrindo espaço na garagem.</p>
+                                    <p><strong>ROI (Return on Investment - Retorno Sobre o Investimento):</strong> O "troféu financeiro". Métrica que calcula o lucro ou benefício obtido em relação ao custo de um investimento. Mostra se valeu a pena gastar combustível naquela corrida.</p>
+                                </div>
+                            </details>
+                            <details class="interactive-section group" data-aos="fade-up">
+                                <summary class="interactive-summary-obj glossary-term">
+                                    <strong class="text-lg font-semibold text-indigo-600 dark:text-indigo-300"><span class="emoji text-xl">🆂</span> Termos com S</strong>
+                                     <i class="fas fa-chevron-down text-indigo-500 dark:text-indigo-400 transform transition-transform duration-300 group-open:rotate-180"></i>
+                                </summary>
+                                <div class="interactive-content glossary-definition">
+                                    <p><strong>SaaS (Software as a Service):</strong> Software como Serviço. Modelo de "aluguel de software supertecnológico". Você acessa o software online, geralmente por assinatura, em vez de comprar e instalar na sua máquina.</p>
+                                    <p><strong>SDR (Sales Development Representative):</strong> O "olheiro da equipe de corrida". Profissional de vendas focado na prospecção e qualificação inicial de leads, encontrando os pilotos promissores.</p>
+                                    <p><strong>SPIN Selling:</strong> Metodologia de vendas que é como um "GPS para a conversa", baseada em fazer perguntas sobre Situação, Problema, Implicação e Necessidade de solução.</p>
+                                    <p><strong>SNAP Selling:</strong> Metodologia de vendas focada em tornar o processo "rápido como um raio": Simples, iNestimável (valor), Alinhado e Prioritário para o cliente.</p>
+                                    <p><strong>SQL (Sales Qualified Lead):</strong> "Piloto pronto para a corrida principal". Lead Qualificado por Vendas. Prospect que foi avaliado pela equipe de vendas e considerado pronto para uma abordagem comercial mais aprofundada.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <div class="highlight bg-gray-50 dark:bg-slate-700 border-l-8 border-gray-500 dark:border-gray-400 rounded-r-xl p-8 shadow-2xl text-left md:text-justify leading-relaxed mt-10" data-aos="fade-up">
+                        <p class="text-lg md:text-xl text-gray-900 dark:text-gray-100">
+                            <strong class="block text-2xl md:text-3xl mb-4 font-bold text-center tracking-wider"><span class="emoji">💡</span> DESVENDOU O CÓDIGO DA PISTA?</strong>
+                            <span class="sentence-emoji">🏁</span>Este glossário é seu companheiro de equipe para todas as horas! <span class="sentence-emoji">🛠️</span>Consulte-o sempre que encontrar um termo novo ou precisar daquela palavra exata para impressionar na negociação. <span class="sentence-emoji">🏆</span>Com o vocabulário dos campeões na ponta da língua, você estará sempre pronto para acelerar rumo ao sucesso! Katchau!
+                        </p>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="btn-nav prev navigateToPlaybookSection" data-target="playbook-sec-7-content-main">❮ A ARTE DA COMUNICAÇÃO</button>
+                    <button class="btn-nav next navigateToPlaybookSection" data-target="playbook-sec-9-content-main">EVOLUÇÃO CONTÍNUA ❯</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botão flutuante para alternar tema -->
+    <button id="themeToggleBtn" class="theme-toggle-button" aria-label="Alternar tema" title="Alternar Tema">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Script AOS (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({ duration: 700, once: true, offset: 50 });
+
+            // Referências aos elementos da página
+            const playbookSec8ContentMain = document.getElementById('playbook-sec-8-content-main');
+            const allPlaybookSubSections = document.querySelectorAll('.playbook-sub-section');
+            
+            // Controles de Acessibilidade
+            const htmlEl = document.documentElement;
+            const increaseFontBtn = document.getElementById('increaseFontBtn');
+            const decreaseFontBtn = document.getElementById('decreaseFontBtn');
+            const readPageBtn = document.getElementById('readPageBtn');
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const moonIcon = '<i class="fas fa-moon"></i>';
+            const sunIcon = '<i class="fas fa-sun"></i>';
+            const FONT_STEP_PERCENT = 10;
+            const MIN_HTML_FONT_PERCENT = 60;
+            const MAX_HTML_FONT_PERCENT = 140;
+            const synth = window.speechSynthesis;
+            let isReading = false;
+            let utterance = null;
+
+            // Função para mostrar uma seção específica e ocultar todas as outras
+            function showSection(sectionToShow) {
+                allPlaybookSubSections.forEach(s => {
+                    if (s && s !== sectionToShow) s.classList.add('hidden');
+                });
+                if (sectionToShow) {
+                    sectionToShow.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    AOS.refreshHard();
+                }
+            }
+
+            // Lógica para alternar o tema (claro/escuro)
+            function applyTheme(theme) {
+                htmlEl.setAttribute('data-theme', theme);
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
+                }
+            }
+            let storedTheme = null;
+            try { storedTheme = localStorage.getItem('theme'); } catch (e) { console.warn("LocalStorage não disponível para persistência do tema.");}
+            const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            applyTheme(storedTheme || preferredTheme);
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    applyTheme(newTheme);
+                    try { localStorage.setItem('theme', newTheme); } catch (e) { console.warn("LocalStorage não está disponível para persistência do tema."); }
+                });
+            }
+
+            // Controles de Acessibilidade de Fonte
+            function getCurrentHtmlFontSizePercent() {
+                const currentSizePx = parseFloat(window.getComputedStyle(htmlEl).fontSize);
+                const browserBaseSizePx = 16;
+                return (currentSizePx / browserBaseSizePx) * 100;
+            }
+            if (increaseFontBtn) {
+                increaseFontBtn.addEventListener('click', () => {
+                    let currentPercent = getCurrentHtmlFontSizePercent();
+                    let newPercent = currentPercent + FONT_STEP_PERCENT;
+                    htmlEl.style.fontSize = Math.min(newPercent, MAX_HTML_FONT_PERCENT) + '%';
+                });
+            }
+            if (decreaseFontBtn) {
+                decreaseFontBtn.addEventListener('click', () => {
+                    let currentPercent = getCurrentHtmlFontSizePercent();
+                    let newPercent = currentPercent - FONT_STEP_PERCENT;
+                    htmlEl.style.fontSize = Math.max(newPercent, MIN_HTML_FONT_PERCENT) + '%';
+                });
+            }
+
+            // Leitura de Voz (Text-to-Speech)
+            if (readPageBtn && synth) {
+                readPageBtn.addEventListener('click', () => {
+                    if (synth.speaking) { synth.cancel(); return; }
+                    let activeSection = playbookSec8ContentMain; // Apenas esta seção para leitura neste arquivo
+                    
+                    if (!activeSection) {
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Nenhuma seção ativa encontrada para leitura.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        return;
+                    }
+                    
+                    let textToRead = "";
+                    activeSection.querySelectorAll('h1, h2, h3, h4, p, li').forEach(el => {
+                        if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE') {
+                            textToRead += el.textContent.replace(/<br>/gi, ' ').trim() + ". ";
+                        }
+                    });
+                    
+                    if (textToRead.trim() === "") {
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Nenhum texto principal encontrado para leitura na seção atual.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        return;
+                    }
+                    
+                    utterance = new SpeechSynthesisUtterance(textToRead.replace(/\s+/g, ' ').trim());
+                    utterance.lang = 'pt-BR';
+                    utterance.onstart = () => { readPageBtn.innerHTML = '<i class="fas fa-stop-circle"></i>'; };
+                    utterance.onend = () => { readPageBtn.innerHTML = '<i class="fas fa-volume-up"></i>'; };
+                    utterance.onerror = () => { readPageBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Erro ao tentar ler a página.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        utterance = null;
+                    };
+                    synth.speak(utterance);
+                });
+            } else if (readPageBtn) {
+                readPageBtn.style.display = 'none';
+                console.warn("Web Speech API (SpeechSynthesis) não é suportada neste navegador.");
+            }
+
+            // Adiciona event listeners para os botões de navegação de sub-seções (apenas como placeholders)
+            document.querySelectorAll('.navigateToPlaybookSection').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const targetId = e.currentTarget.getAttribute('data-target');
+                    console.log(`Navegar para a seção: ${targetId}. (Em um sistema completo, essa seção seria carregada/mostrada aqui)`);
+                    allPlaybookSubSections.forEach(sec => sec.classList.add('hidden'));
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) targetSection.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+            document.querySelectorAll('.backToManualPitStopDetalhesBtn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    console.log(`Voltando ao guia estratégico. (Em um sistema completo, essa seção seria carregada/mostrada aqui)`);
+                });
+            });
+
+            // Exibir a seção 'playbook-sec-8-content-main' ao carregar a página
+            showSection(document.getElementById('playbook-sec-8-content-main'));
+        });
+    </script>
+</body>
+</html>

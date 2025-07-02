@@ -1,0 +1,778 @@
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import * as Tone from 'tone'; // Importa Tone.js para efeitos sonoros
+
+// =====================================================================
+// ÍCONES SVG
+// Componentes simples para renderizar ícones usados na interface.
+// =====================================================================
+const TrophyIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trophy text-yellow-400 inline-block drop-shadow-lg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>;
+const ArrowRightIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right ml-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>;
+const ClockIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
+const CheckCircleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check-circle text-green-500 stroke-current drop-shadow-md"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+const XCircleIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x-circle text-red-500 stroke-current drop-shadow-md"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>;
+const StarIcon = ({ className = "text-yellow-400" }) => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none" className={`lucide lucude-star ${className}`}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+
+
+// =====================================================================
+// BANCO DE PERGUNTAS
+// Contém todas as perguntas, divididas por etapas, com opções,
+// resposta correta e pontuação.
+// =====================================================================
+// Banco de perguntas completo para 10 níveis x 5 perguntas = 50 perguntas.
+// As perguntas foram duplicadas e modificadas para atingir o total de 50,
+// garantindo que cada "stage" (nível) tenha 5 perguntas.
+const ALL_QUESTIONS = [
+    // Nível 1: Fundamentos (5 perguntas)
+    { stage: 1, question: "🚗 O que é 'repasse de veículos' no nosso contexto de negócio?", options: ["👤 Venda para consumidor final", "🏢 Venda de veículos de uma loja para outra (B2B)", "🔑 Aluguel de frotas", "👨‍⚖️ Leilão público"], correct: 1, points: 10 },
+    { stage: 1, question: "🎯 Quem é o cliente-alvo da nossa plataforma de repasse?", options: ["👨‍👩‍👧‍👦 Pessoas físicas buscando um carro", "🏬 Lojistas e revendedores de veículos", "🛠️ Oficinas mecânicas", "🛡️ Seguradoras"], correct: 1, points: 10 },
+    { stage: 1, question: "✨ Qual a principal vantagem que nossa plataforma oferece a um lojista?", options: ["📜 Garantia de fábrica extendida", "🔄 Acesso rápido e constante a um novo estoque", "💰 Financiamento para o consumidor final", " chauffeur Serviço de motorista particular"], correct: 1, points: 10 },
+    { stage: 1, question: "🚜 Qual o foco principal da plataforma ARREMAQ?", options: ["🚗 Carros populares", "🏗️ Máquinas pesadas e equipamentos agrícolas", "🚤 Barcos e Lanchas", "🏠 Imóveis"], correct: 1, points: 10 },
+    { stage: 1, question: "👷 Quem é o principal cliente da ARREMAQ?", options: ["👩‍🌾 Agronegócio e construtoras", "🌇 Agências de publicidade", "👨‍⚕️ Hospitais", "👩‍🏫 Escolas"], correct: 0, points: 10 },
+    
+    // Nível 2: Produtos e Serviços (5 perguntas)
+    { stage: 2, question: "🔍 Qual a ferramenta da Auto Arremate® que inspeciona o veículo com inteligência artificial?", options: ["📸 PhotoScan", "💡 RaioX", "⚡ TurboScan", "🗺️ MapaVeicular"], correct: 1, points: 20 },
+    { stage: 2, question: "📈 O que é o RaioX+?", options: ["Um scanner de peças", "Uma versão do RaioX com consulta de histórico veicular", "Um upgrade de motor para carros", "Um novo tipo de vistoria manual"], correct: 1, points: 20 },
+    { stage: 2, question: "💰 Como a Auto Arremate® ajuda o lojista a ganhar mais dinheiro?", options: ["Comprando carros dele diretamente", "Aumentando a liquidez e rentabilidade do estoque de repasse", "Vendendo seguros mais baratos", "Oferecendo lavagem de carros grátis"], correct: 1, points: 20 },
+    { stage: 2, question: "🔄 Qual a solução para locadoras que precisam 'aposentar' carros da frota?", options: ["Doação para instituições", "Remarketing de frotas", "Guarda em galpões", "Desmanche"], correct: 1, points: 20 },
+    { stage: 2, question: "⚙️ A Arremaq® lida com qual tipo de equipamento?", options: ["🛵 Motos e patinetes", "🚜 Tratores, empilhadeiras e caminhões", "🚁 Drones e helicópteros", "🚲 Bicicletas elétricas"], correct: 1, points: 20 },
+
+    // Nível 3: Vendas e Metodologia (5 perguntas)
+    { stage: 3, question: "🤔 Qual metodologia de vendas foca em Situação, Problema, Implicação e Necessidade de Solução?", options: ["🤝 AIDA", "💡 SPIN Selling", "🎯 SNAP Selling", "🚀 BANT"], correct: 1, points: 30 },
+    { stage: 3, question: "⚡ Qual metodologia de vendas é focada em ser Simples, iNestimável, Alinhado e Prioritário?", options: ["📈 Consultative Selling", "🎯 SNAP Selling", "🗣️ Challenger Sale", "🔄 Solution Selling"], correct: 1, points: 30 },
+    { stage: 3, question: "🧠 O que significa 'qualificar um lead'?", options: ["Convidá-lo para um café", "Avaliar se ele tem potencial para se tornar um cliente", "Enviar um catálogo de produtos", "Pedir um feedback sobre o atendimento"], correct: 1, points: 30 },
+    { stage: 3, question: "🛡️ O que é a técnica 'Sentir, Sentiu, Descobriu'?", options: ["Um exercício de empatia", "Uma forma de contornar objeções de clientes", "Uma tática para fechar vendas rápidas", "Um método para identificar leads"], correct: 1, points: 30 },
+    { stage: 3, question: "🗺️ O que são 'cadências de prospecção'?", options: ["Músicas para trabalhar", "Sequências e frequências de contato com leads", "Treinos de vendas diários", "Mapas de estradas"], correct: 1, points: 30 },
+
+    // Nível 4: Mercado e Estratégia (5 perguntas)
+    { stage: 4, question: "📊 Qual o principal KPI (indicador) para medir o sucesso da nossa plataforma?", options: ["Número de acessos ao site", "Volume e giro do estoque de repasse dos clientes", "Quantidade de e-mails enviados", "Número de curtidas nas redes sociais"], correct: 1, points: 40 },
+    { stage: 4, question: "🔗 Por que a validação de CNPJ é crucial em vendas B2B?", options: ["Para saber o endereço da empresa", "Para garantir a saúde financeira e a segurança da parceria", "Para enviar brindes corporativos", "Para verificar se a empresa tem estacionamento"], correct: 1, points: 40 },
+    { stage: 4, question: "✍️ Qual a importância dos 'gatilhos mentais' na comunicação de vendas?", options: ["São palavras-chave para SEO", "Ajudam a persuadir e influenciar a decisão do cliente", "São termos técnicos do mercado", "Apenas para deixar a conversa mais divertida"], correct: 1, points: 40 },
+    { stage: 4, question: "📚 O que é o Glossário do Playbook?", options: ["Uma lista de livros para ler", "Um dicionário de termos técnicos do nosso mercado", "Um guia de pronúncia de marcas de carro", "Uma coleção de piadas sobre vendas"], correct: 1, points: 40 },
+    { stage: 4, question: "🃏 O que são os 'AutoCards™'?", options: ["Cartões de visita digitais", "Uma ferramenta de gamificação para prospecção e vendas", "Cartões de crédito exclusivos", "Baralhos temáticos de carros"], correct: 1, points: 40 },
+
+    // Nível 5: Campeão do Repasse (5 perguntas)
+    { stage: 5, question: "📉 Qual o impacto de uma alta na taxa de juros (SELIC) no nosso negócio?", options: ["🥳 Positivo, pois os carros ficam mais baratos", "😟 Negativo, pois o crédito para o consumidor final fica mais caro, diminuindo a venda nas lojas parceiras", "🤷 Nulo", "🆕 Apenas afeta a venda de carros 0km"], correct: 1, points: 50 },
+    { stage: 5, question: "🎁 O que é 'Cross-sell' e como poderíamos aplicá-lo?", options: ["❌ Vender carros com problemas", "🤝 Oferecer serviços adicionais ao lojista, como financiamento para o estoque dele (Capital de Giro) ou relatórios de mercado", "🔩 Vender peças usadas", "🚫 É uma manobra de vendas ilegal"], correct: 1, points: 50 },
+    { stage: 5, question: "📈 O que é 'Up-sell' e como aplicá-lo?", options: ["Vender um produto de menor valor", "Convencer o cliente a comprar um produto ou serviço mais caro ou com mais funcionalidades", "Vender para o mesmo cliente repetidamente", "Trocar um produto por outro"], correct: 1, points: 50 },
+    { stage: 5, question: "🌟 Qual a importância do feedback do cliente?", options: ["Apenas para inflar o ego", "Para melhorar continuamente nossos produtos e serviços", "Não é importante", "Somente para resolver problemas pontuais"], correct: 1, points: 50 },
+    { stage: 5, question: "🏆 Qual a melhor atitude para um 'Campeão do Repasse'?", options: ["Desistir no primeiro obstáculo", "Manter-se atualizado e buscar a excelência contínua", "Ignorar as mudanças do mercado", "Focar apenas em metas de curto prazo"], correct: 1, points: 50 },
+
+    // Nível 6 (5 perguntas)
+    { stage: 6, question: "🤔 Qual a importância da análise de mercado para a Auto Arremate?", options: ["Apenas para curiosidade", "Identificar novas oportunidades e ameaças", "Determinar o preço do café", "Escolher o time de futebol"], correct: 1, points: 60 },
+    { stage: 6, question: "📊 Qual o papel da tecnologia na otimização do repasse de veículos?", options: ["Aumentar a burocracia", "Agilizar processos e aumentar a precisão das avaliações", "Substituir completamente a equipe", "Diminuir a comunicação com o cliente"], correct: 1, points: 60 },
+    { stage: 6, question: "🌍 Como a Auto Arremate® e Arremaq® contribuem para a economia circular?", options: ["Apenas vendendo carros usados", "Facilitando a reutilização e o giro de ativos, reduzindo o desperdício", "Produzindo novos veículos", "Descartando materiais"], correct: 1, points: 60 },
+    { stage: 6, question: "💡 Qual o diferencial competitivo da nossa plataforma?", options: ["Preços mais baixos sempre", "Inteligência de dados e rede exclusiva de lojistas", "Atendimento apenas presencial", "Foco em um único tipo de veículo"], correct: 1, points: 60 },
+    { stage: 6, question: "🗣️ Como podemos usar depoimentos de clientes para impulsionar vendas?", options: ["Ignorando-os", "Como prova social e ferramenta de credibilidade", "Apenas para o marketing interno", "Não faz diferença"], correct: 1, points: 60 },
+
+    // Nível 7 (5 perguntas)
+    { stage: 7, question: "🔒 Qual a importância da segurança de dados para nossos clientes?", options: ["É irrelevante", "Garantir a privacidade e proteger informações sensíveis", "Apenas para cumprir regulamentos", "Deixar os dados expostos"], correct: 1, points: 70 },
+    { stage: 7, question: "🌱 Como o conceito de 'long-tail' se aplica ao nosso mercado de repasse?", options: ["Focar apenas nos carros mais populares", "Atender a nichos de mercado e veículos específicos com menor volume, mas alta demanda combinada", "Vender somente veículos de luxo", "Ignorar veículos incomuns"], correct: 1, points: 70 },
+    { stage: 7, question: "🔄 Qual a importância da agilidade no processo de repasse?", options: ["Não há necessidade de pressa", "Minimizar o tempo de estoque parado e otimizar o capital de giro", "Apenas para cumprir prazos internos", "Aumentar a complexidade"], correct: 1, points: 70 },
+    { stage: 7, question: "🤝 Como construir um relacionamento duradouro com o lojista?", options: ["Oferecendo o menor preço sempre", "Através de suporte contínuo, transparência e soluções personalizadas", "Apenas com visitas esporádicas", "Limitando o contato ao essencial"], correct: 1, points: 70 },
+    { stage: 7, question: "📈 O que significa 'escalabilidade' no nosso modelo de negócio?", options: ["Crescer em tamanho físico apenas", "Capacidade de crescer e expandir operações sem perder eficiência ou qualidade", "Manter o negócio pequeno", "Diminuir o número de clientes"], correct: 1, points: 70 },
+
+    // Nível 8 (5 perguntas)
+    { stage: 8, question: "⚡ Qual o impacto da inteligência artificial nas avaliações de veículos?", options: ["Torna o processo mais lento", "Aumenta a precisão, agilidade e padronização das análises", "Reduz a confiabilidade", "Cria mais erros"], correct: 1, points: 80 },
+    { stage: 8, question: "🚀 Como a inovação contínua beneficia nossos parceiros?", options: ["Não tem impacto", "Oferecendo novas ferramentas e soluções para aumentar a competitividade e lucratividade", "Apenas muda a interface", "Cria complexidade desnecessária"], correct: 1, points: 80 },
+    { stage: 8, 
+        question: "🌐 Por que a presença digital é vital para a Auto Arremate e Arremaq?", 
+        options: ["É apenas uma tendência", "Permite alcançar um público maior, aumentar a visibilidade e facilitar transações online", "Só serve para mostrar fotos", "Diminui o alcance"], 
+        correct: 1, 
+        points: 80 
+    },
+    { stage: 8, 
+        question: "🌱 Qual o papel da sustentabilidade em nosso nicho de mercado?", 
+        options: ["Não é relevante", "Promover a reutilização de bens e reduzir o impacto ambiental do descarte prematuro", "Aumentar o consumo de recursos", "Gerar mais lixo"], 
+        correct: 1, 
+        points: 80 
+    },
+    { stage: 8, 
+        question: "🏆 Como um vendedor se torna um 'Top Performer' em nossa equipe?", 
+        options: ["Apenas vendendo muito", "Dominando o produto, as metodologias de vendas e construindo relacionamentos sólidos com os clientes", "Contando com a sorte", "Trabalhando sozinho"], 
+        correct: 1, 
+        points: 80 
+    },
+
+    // Nível 9 (5 perguntas)
+    { stage: 9, question: "🔍 Qual a importância da segmentação de clientes?", options: ["Não há necessidade", "Personalizar a abordagem de vendas e marketing para atender às necessidades específicas de cada grupo", "Tratar todos os clientes da mesma forma", "Aumentar a complexidade"], correct: 1, points: 90 },
+    { stage: 9, question: "💡 Como a inteligência de mercado pode ser usada para identificar tendências?", options: ["Adivinhando o futuro", "Analisando dados de vendas, comportamento do consumidor e fatores econômicos", "Seguindo a opinião popular", "Ignorando os números"], correct: 1, points: 90 },
+    { stage: 9, question: "🗣️ O que é 'comunicação não-violenta' e sua aplicação em vendas?", options: ["Falar sem emoção", "Uma abordagem que foca na empatia e na resolução de conflitos para construir relações mais fortes com o cliente", "Impor a sua vontade", "Criticar o cliente"], correct: 1, points: 90 },
+    { stage: 9, question: "🤝 Qual o valor de uma rede de parceiros robusta para o nosso negócio?", options: ["É insignificante", "Amplia o alcance, gera novas oportunidades e fortalece o ecossistema de repasse", "Apenas para ter mais contatos", "Cria concorrência interna"], correct: 1, points: 90 },
+    { stage: 9, question: "🚀 Como a mentalidade de crescimento ('growth mindset') se aplica ao time de vendas?", options: ["Acreditar que o talento é fixo", "Adotar uma postura de aprendizado contínuo, resiliência diante de desafios e busca por aprimoramento", "Desistir após o fracasso", "Apenas focar em resultados imediatos"], correct: 1, points: 90 },
+
+    // Nível 10: Desafio Final (5 perguntas)
+    { stage: 10, question: "🔮 Qual o futuro do mercado de repasse de veículos e equipamentos?", options: ["Será estagnado", "Cada vez mais digital, tecnológico e focado em soluções ágeis e sustentáveis", "Voltará ao modelo tradicional", "Será dominado por apenas um player"], correct: 1, points: 100 },
+    { stage: 10, question: "🌟 Como a Auto Arremate e Arremaq se posicionam como líderes de mercado?", options: ["Pela sorte", "Pela inovação constante, expertise e compromisso com o sucesso dos parceiros", "Copiando a concorrência", "Ignorando as necessidades do cliente"], correct: 1, points: 100 },
+    { stage: 10, question: "🏅 Qual o legado que queremos construir para os nossos clientes?", options: ["Apenas uma transação", "Uma parceria de valor, sucesso compartilhado e otimização contínua de seus negócios", "Um relacionamento breve", "Apenas um bom preço"], correct: 1, points: 100 },
+    { stage: 10, question: "🌐 Como a globalização impacta o mercado de repasse?", options: ["Não há impacto", "Cria novas oportunidades de exportação/importação e aumenta a complexidade das cadeias de valor", "Limita o mercado a nível local", "Simplifica tudo"], correct: 1, points: 100 },
+    { stage: 10, question: "👑 Qual o principal conselho para um 'Campeão do Repasse' continuar no topo?", options: ["Relaxar após a vitória", "Nunca parar de aprender, adaptar-se e buscar novas formas de gerar valor", "Confiar apenas na experiência passada", "Ignorar a concorrência"], correct: 1, points: 100 },
+];
+
+
+const QUESTIONS_PER_STAGE = 5; // 5 perguntas por nível
+const TOTAL_STAGES = ALL_QUESTIONS.length / QUESTIONS_PER_STAGE; // Total de níveis
+const TIME_PER_QUESTION = 10; // Segundos por pergunta
+
+
+// =====================================================================
+// COMPONENTES DA UI
+// Cada parte da interface é um componente React.
+// =====================================================================
+
+// Contexto de Áudio para o Tone.js
+const AudioContext = React.createContext(null);
+
+const AudioProvider = ({ children }) => {
+    const synth = useRef(null);
+    const audioContextStarted = useRef(false);
+
+    useEffect(() => {
+        // Inicializa o Tone.js apenas uma vez
+        if (!synth.current) {
+            synth.current = new Tone.Synth({
+                oscillator: { type: "sine" },
+                envelope: {
+                    attack: 0.01,
+                    decay: 0.1,
+                    sustain: 0.05,
+                    release: 0.5
+                }
+            }).toDestination();
+        }
+    }, []);
+
+    const playSound = useCallback(async (type) => {
+        if (!audioContextStarted.current) {
+            await Tone.start();
+            audioContextStarted.current = true;
+            console.log("Tone.js audio context started.");
+        }
+        if (synth.current) {
+            switch (type) {
+                case 'click':
+                    synth.current.triggerAttackRelease("C6", "64n"); // Som de clique mais agudo e curto
+                    break;
+                case 'correct':
+                    synth.current.triggerAttackRelease("G5", "8n"); // Som de acerto
+                    break;
+                case 'incorrect':
+                    synth.current.triggerAttackRelease("C#3", "8n"); // Som de erro
+                    break;
+                case 'stage_complete':
+                    synth.current.triggerAttackRelease(["C4", "E4", "G4"], "4n"); // Acorde para fase completa
+                    break;
+                case 'game_over':
+                    synth.current.triggerAttackRelease(["C5", "G5", "C6"], "2n"); // Acorde para fim de jogo
+                    break;
+                case 'timer_warning':
+                    synth.current.triggerAttackRelease("A2", "32n"); // Alerta de timer
+                    break;
+                default:
+                    synth.current.triggerAttackRelease("C4", "16n");
+            }
+        }
+    }, []);
+
+    return (
+        <AudioContext.Provider value={{ playSound }}>
+            {children}
+        </AudioContext.Provider>
+    );
+};
+
+/**
+ * Componente: PlayerSetup
+ * Tela inicial para inserir os nomes dos jogadores.
+ */
+const PlayerSetup = ({ onSetupComplete }) => {
+    const [players, setPlayers] = useState(Array(2).fill('')); // Começa com 2 inputs visíveis
+    const [error, setError] = useState('');
+    const { playSound } = React.useContext(AudioContext);
+
+    const handlePlayerNameChange = (index, name) => {
+        const newPlayers = [...players];
+        newPlayers[index] = name;
+        setPlayers(newPlayers);
+        if (error) setError('');
+    };
+
+    const addPlayerInput = () => {
+        playSound('click');
+        if (players.length < 10) { // Limite de 10 jogadores
+            setPlayers([...players, '']);
+        }
+    };
+
+    const removePlayerInput = (indexToRemove) => {
+        playSound('click');
+        if (players.length > 1) { // Garante pelo menos um jogador
+            setPlayers(players.filter((_, index) => index !== indexToRemove));
+        }
+    };
+
+    const startGame = () => {
+        playSound('click');
+        const validPlayers = players
+            .map(name => name.trim())
+            .filter(name => name !== '');
+
+        if (validPlayers.length === 0) {
+            setError('Insira o nome de pelo menos um jogador para começar!');
+            return;
+        }
+
+        const finalPlayers = validPlayers.map(name => ({ name, score: 0, currentStageQuestionsAnswered: 0 }));
+        onSetupComplete(finalPlayers);
+    };
+
+    return (
+        <div className="w-full max-w-2xl mx-auto p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-3xl border border-gray-200 dark:border-slate-700 animate-fade-in transform-gpu scale-100 opacity-100">
+            <div className="text-center mb-6">
+                <h2 className="text-4xl font-extrabold text-blue-800 dark:text-blue-300">
+                    <TrophyIcon className="inline-block mr-2 animate-bounce-subtle" /> DESAFIO DOS CAMPEÕES <TrophyIcon className="inline-block ml-2 animate-bounce-subtle" />
+                </h2>
+                <h3 className="text-xl mt-3 font-semibold text-gray-700 dark:text-gray-300">
+                    <span className="text-teal-600 dark:text-teal-400">AUTO ARREMATE</span> & <span className="text-orange-500 dark:text-orange-300">ARREMAQ</span>
+                </h3>
+                <p className="text-md text-gray-500 dark:text-gray-400 mt-2">
+                    TESTE SEU CONHECIMENTO ESTRATÉGICO!
+                </p>
+            </div>
+
+            <p className="text-center text-lg text-gray-700 dark:text-gray-300 mb-8 px-4">
+                🚀 Prepare-se para acelerar seu conhecimento! Insira os nomes dos jogadores (até 10) para dar a largada.
+            </p>
+            <div className="space-y-4 max-h-64 overflow-y-auto pr-2 custom-scrollbar"> {/* Scrollbar para mais jogadores */}
+                {players.map((name, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                        <input type="text" value={name} onChange={(e) => handlePlayerNameChange(index, e.target.value)} placeholder={`Nome do Jogador ${index + 1}`} className="w-full px-5 py-3 bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-4 focus:ring-teal-500/50 dark:focus:ring-teal-400/50 transition-all shadow-md text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"/>
+                        {players.length > 1 && ( // Só mostra o botão de remover se houver mais de um jogador
+                            <button onClick={() => removePlayerInput(index)} className="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-minus"><path d="M5 12h14"/></svg>
+                            </button>
+                        )}
+                    </div>
+                ))}
+            </div>
+            {players.length < 10 && (
+                <div className="text-center mt-4">
+                    <button onClick={addPlayerInput} className="btn-secondary-animated">
+                        + Adicionar Jogador
+                    </button>
+                </div>
+            )}
+            
+            {error && <p className="text-red-500 text-center mt-4 font-semibold animate-shake">{error}</p>}
+            <div className="text-center mt-8">
+                <button onClick={startGame} className="btn-primary-animated">
+                    INICIAR DESAFIO! <ArrowRightIcon />
+                </button>
+            </div>
+        </div>
+    );
+};
+
+/**
+ * Componente: Scoreboard
+ * Exibe o placar dos jogadores em tempo real.
+ */
+const Scoreboard = ({ players, currentStage, currentQuestionNum }) => {
+    const sortedPlayers = useMemo(() => 
+        [...players].sort((a, b) => b.score - a.score), 
+        [players]
+    );
+
+    return (
+        <div className="w-full bg-gradient-to-br from-purple-100 to-blue-100 dark:from-slate-700 dark:to-slate-900 p-6 rounded-2xl shadow-xl border border-blue-200 dark:border-slate-700 transform-gpu animate-slide-in-right">
+            <h3 className="text-2xl font-bold text-center mb-4 text-blue-800 dark:text-blue-300">🏅 Placar Atual</h3>
+            <div className="flex justify-between items-center bg-blue-50 dark:bg-slate-700 p-3 rounded-lg mb-4 shadow-sm border border-blue-100 dark:border-slate-600">
+                <span className="font-semibold text-blue-700 dark:text-blue-200">Nível: <span className="font-bold">{currentStage} / {TOTAL_STAGES}</span></span>
+                <span className="font-semibold text-blue-700 dark:text-blue-200">Pergunta: <span className="font-bold">{currentQuestionNum} / {QUESTIONS_PER_STAGE}</span></span>
+            </div>
+            <ul className="space-y-3">
+                {sortedPlayers.map((player, index) => (
+                    <li key={player.name} className="flex justify-between items-center text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-800 px-4 py-3 rounded-xl transition-all duration-500 transform hover:scale-[1.02] hover:shadow-lg focus-within:ring-2 focus-within:ring-teal-500 border border-gray-200 dark:border-slate-700">
+                        <div className="flex items-center">
+                            <span className="font-extrabold text-lg mr-3 text-blue-600 dark:text-blue-400">{index + 1}.</span>
+                            <span className="font-semibold text-lg">{player.name}</span>
+                        </div>
+                        <span className="font-bold text-xl text-teal-600 dark:text-teal-400 animate-score-pop-individual">{player.score} <span className="text-sm">pts</span></span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+/**
+ * Componente: PointGainDisplay
+ * Exibe a pontuação ganha com uma animação.
+ */
+const PointGainDisplay = ({ points, onAnimationEnd }) => {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            onAnimationEnd();
+        }, 1000); // Duração da animação de flutuação
+        return () => clearTimeout(timer);
+    }, [onAnimationEnd]);
+
+    return (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="text-green-500 text-5xl font-extrabold animate-float-up opacity-0 drop-shadow-lg">+{points}</span>
+        </div>
+    );
+};
+
+/**
+ * Componente: QuizScreen
+ * A tela principal do jogo, onde as perguntas e respostas acontecem.
+ */
+const QuizScreen = ({ players, onQuizEnd }) => {
+    const { playSound } = React.useContext(AudioContext);
+
+    const [phase, setPhase] = useState('question'); // Fases: 'question', 'answering', 'results'
+    const [internalPlayers, setInternalPlayers] = useState(players);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [timer, setTimer] = useState(TIME_PER_QUESTION);
+    const [playerAnswers, setPlayerAnswers] = useState([]);
+    const [activeAnsweringPlayer, setActiveAnsweringPlayer] = useState(0);
+    const [key, setKey] = useState(0); // Chave para forçar a re-renderização e reiniciar a animação do timer
+    const [showPointsGained, setShowPointsGained] = useState(false);
+    const [lastPointsGained, setLastPointsGained] = useState(0);
+    const [selectedOptionIndex, setSelectedOptionIndex] = useState(null); // Para destacar a opção clicada
+    const [currentStageQuestionsAnswered, setCurrentStageQuestionsAnswered] = useState(0); // Perguntas respondidas no nível atual
+
+    const currentQuestion = useMemo(() => ALL_QUESTIONS[currentQuestionIndex], [currentQuestionIndex]);
+    const currentStage = currentQuestion.stage;
+
+    // Lógica para avançar entre as fases do jogo
+    const nextPhase = useCallback(() => {
+        playSound('click');
+        if (phase === 'question') {
+            setPhase('answering');
+        } else if (phase === 'results') {
+            setSelectedOptionIndex(null); // Limpa a seleção
+            const nextQuestionIndex = currentQuestionIndex + 1;
+            const nextStageQuestionCount = currentStageQuestionsAnswered + 1;
+
+            setCurrentStageQuestionsAnswered(nextStageQuestionCount); // Incrementa o contador de perguntas respondidas no estágio
+
+            if (nextStageQuestionCount >= QUESTIONS_PER_STAGE) { // Se todas as perguntas do nível foram respondidas
+                if (currentStage < TOTAL_STAGES) { // Se não for o último nível
+                    playSound('stage_complete');
+                    setTimeout(() => { // Pequeno delay para a transição
+                        setCurrentQuestionIndex(nextQuestionIndex);
+                        setPhase('question');
+                        setPlayerAnswers([]);
+                        setActiveAnsweringPlayer(0);
+                        setTimer(TIME_PER_QUESTION);
+                        setKey(prev => prev + 1);
+                        setCurrentStageQuestionsAnswered(0); // Reinicia para o novo estágio
+                    }, 1500); // Delay para o som de stage_complete
+                } else { // Se for o último nível
+                    playSound('game_over');
+                    onQuizEnd(internalPlayers);
+                }
+            } else if (nextQuestionIndex < ALL_QUESTIONS.length) { // Se há mais perguntas no estágio atual
+                setCurrentQuestionIndex(nextQuestionIndex);
+                setPhase('question');
+                setPlayerAnswers([]);
+                setActiveAnsweringPlayer(0);
+                setTimer(TIME_PER_QUESTION);
+                setKey(prev => prev + 1);
+            } else { // Caso todas as perguntas tenham sido respondidas e o jogo chegou ao fim
+                playSound('game_over');
+                onQuizEnd(internalPlayers);
+            }
+        }
+    }, [phase, currentQuestionIndex, currentStageQuestionsAnswered, currentStage, onQuizEnd, internalPlayers, playSound]);
+
+    // Efeito para controlar o temporizador
+    useEffect(() => {
+        if (phase !== 'question') return;
+        const interval = setInterval(() => {
+            setTimer(t => {
+                if (t > 1) {
+                    if (t <= 5 && t > 1) { // Alerta sonoro nos últimos 5 segundos
+                        playSound('timer_warning');
+                    }
+                    return t - 1;
+                }
+                nextPhase(); // Move para a fase de resposta quando o tempo acaba
+                return 0;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [phase, nextPhase, playSound]);
+
+    // Lida com a resposta de um jogador
+    const handleAnswer = (optionIndex) => {
+        playSound('click'); // Som de clique para a opção
+        setSelectedOptionIndex(optionIndex); // Destaca a opção clicada
+
+        // Verifica se o jogador já respondeu nesta rodada
+        const playerAlreadyAnswered = playerAnswers.some(ans => ans.playerIndex === activeAnsweringPlayer);
+        if (playerAlreadyAnswered) {
+            return; // Impede que o jogador responda múltiplas vezes
+        }
+
+        const newAnswers = [...playerAnswers, { playerIndex: activeAnsweringPlayer, answer: optionIndex }];
+        setPlayerAnswers(newAnswers);
+
+        const isCorrect = optionIndex === currentQuestion.correct;
+        let pointsGained = 0;
+
+        if (isCorrect) {
+            pointsGained = currentQuestion.points;
+            playSound('correct'); // Som de acerto
+            setLastPointsGained(pointsGained);
+            setShowPointsGained(true);
+        } else {
+            playSound('incorrect'); // Som de erro
+        }
+
+        const updatedPlayers = [...internalPlayers];
+        updatedPlayers[activeAnsweringPlayer].score += pointsGained;
+        updatedPlayers[activeAnsweringPlayer].currentStageQuestionsAnswered = currentStageQuestionsAnswered + 1; // Incrementa perguntas respondidas pelo jogador
+        setInternalPlayers(updatedPlayers);
+
+        // Avança para o próximo jogador ou para a fase de resultados
+        if (activeAnsweringPlayer < internalPlayers.length - 1) {
+            setTimeout(() => { 
+                setActiveAnsweringPlayer(prev => prev + 1);
+                setShowPointsGained(false); 
+                setSelectedOptionIndex(null); 
+            }, 1200); 
+        } else {
+            setTimeout(() => { 
+                setPhase('results');
+                setShowPointsGained(false); 
+            }, 1200); 
+        }
+    };
+    
+    const timerPercentage = (timer / TIME_PER_QUESTION) * 100;
+    const timerColorClass = timer <= 5 ? 'text-red-500 animate-pulse-fast' : 'text-teal-500';
+
+    return (
+        <div className="w-full max-w-7xl mx-auto p-4 md:p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 relative"> {/* Adicionado relative para o PointGainDisplay */}
+                    {showPointsGained && <PointGainDisplay points={lastPointsGained} onAnimationEnd={() => setShowPointsGained(false)} />}
+
+                    {/* Fase da Pergunta */}
+                    {phase === 'question' && (
+                         <div key={key} className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-3xl border border-gray-200 dark:border-slate-700 animate-fade-in transform-gpu">
+                            <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-200 dark:border-slate-700">
+                                <span className="text-lg font-bold bg-gradient-to-r from-teal-400 to-green-500 text-white px-4 py-2 rounded-full shadow-lg">NÍVEL {currentStage} / {TOTAL_STAGES}</span>
+                                <span className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                                    Pergunta { (currentQuestionIndex % QUESTIONS_PER_STAGE) + 1} de {QUESTIONS_PER_STAGE}
+                                </span>
+                            </div>
+                            <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-8 text-center md:text-left">
+                                <div className="relative w-32 h-32 flex-shrink-0 flex items-center justify-center">
+                                    <svg className="w-full h-full transform -rotate-90 absolute top-0 left-0" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="none" className="stroke-current text-gray-300 dark:text-slate-600" strokeWidth="3"></circle><circle cx="18" cy="18" r="16" fill="none" className={`stroke-current transition-all duration-1000 ease-linear ${timerColorClass}`} strokeWidth="3" strokeDasharray={`${timerPercentage}, 100`} /></svg>
+                                    <div className="absolute flex flex-col items-center justify-center inset-0 text-gray-800 dark:text-gray-200"><ClockIcon className="w-8 h-8"/><span className="text-3xl font-extrabold mt-1">{timer}</span><span className="text-sm">seg.</span></div>
+                                </div>
+                                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-200 leading-snug drop-shadow-md flex-grow">
+                                    {currentQuestion.question}
+                                </h2>
+                            </div>
+                            <div className="text-center mt-6">
+                                <button onClick={nextPhase} className="btn-primary-animated">
+                                    PRONTO PARA RESPONDER! <ArrowRightIcon />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                     {/* Fase da Resposta */}
+                    {phase === 'answering' && (
+                        <div key={activeAnsweringPlayer} className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-3xl border border-gray-200 dark:border-slate-700 animate-slide-in-left transform-gpu">
+                            <h2 className="text-3xl font-bold text-center text-purple-600 dark:text-purple-300 mb-4 animate-pulse-subtle">🤫 Vez de <span className="bg-yellow-200 dark:bg-yellow-800 px-3 py-1 rounded-md">{internalPlayers[activeAnsweringPlayer].name}</span>...</h2>
+                            <p className="text-center text-gray-500 dark:text-gray-400 text-lg mb-8">(Os outros não olhem! Escolha sua resposta.)</p>
+                             <div className="space-y-4">
+                                {currentQuestion.options.map((option, index) => (
+                                    <button key={index} onClick={() => handleAnswer(index)} disabled={selectedOptionIndex !== null} // Desabilita botões após a seleção
+                                    className={`w-full text-left p-4 rounded-xl font-semibold text-lg transition-all duration-300 border-2 
+                                        ${selectedOptionIndex === index ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30 shadow-lg' : 'border-transparent bg-gray-50 dark:bg-slate-700 hover:bg-teal-100 dark:hover:bg-slate-600 hover:scale-[1.01] hover:shadow-md'}
+                                        transform-gpu focus:outline-none focus:ring-2 focus:ring-blue-500`}>
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    {/* Fase dos Resultados */}
+                    {phase === 'results' && (
+                        <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-3xl border border-gray-200 dark:border-slate-700 animate-fade-in transform-gpu">
+                            <h2 className="text-3xl font-bold text-center mb-6 text-blue-700 dark:text-blue-300">🎉 Resultado da Rodada! 🎉</h2>
+                            <p className="text-xl font-semibold text-center mb-3 text-gray-700 dark:text-gray-300">A resposta correta é:</p>
+                            <div className="bg-green-100 dark:bg-green-900/50 p-5 rounded-lg text-center font-bold text-2xl text-green-800 dark:text-green-200 mb-8 shadow-inner animate-pop-in border border-green-200 dark:border-green-700">
+                                {currentQuestion.options[currentQuestion.correct]}
+                            </div>
+                            <ul className="space-y-3">
+                                {internalPlayers.map((player, index) => {
+                                    const playerAnswer = playerAnswers.find(a => a.playerIndex === index);
+                                    const isCorrect = playerAnswer?.answer === currentQuestion.correct;
+                                    const answeredOptionText = currentQuestion.options[playerAnswer?.answer] || "Não respondeu";
+                                    return (
+                                        <li key={index} className={`flex justify-between items-center p-4 rounded-md shadow-sm transition-all duration-300 ${isCorrect ? 'bg-green-50 dark:bg-green-900/20' : 'bg-red-50 dark:bg-red-900/20'} border ${isCorrect ? 'border-green-200 dark:border-green-700' : 'border-red-200 dark:border-red-700'}`}>
+                                            <span className="font-semibold text-gray-800 dark:text-gray-200 text-lg">{player.name}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`text-sm ${isCorrect ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'}`}>{answeredOptionText}</span>
+                                                {isCorrect ? <CheckCircleIcon /> : <XCircleIcon />}
+                                            </div>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                            <div className="text-center mt-6">
+                                <button onClick={nextPhase} className="btn-primary-animated">Próxima Pergunta <ArrowRightIcon /></button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                
+                <div className="lg:col-span-1">
+                    <Scoreboard players={internalPlayers} currentStage={currentStage} currentQuestionNum={(currentQuestionIndex % QUESTIONS_PER_STAGE) + 1} />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+/**
+ * Componente: GameOverScreen
+ * Tela final, exibindo o vencedor e o placar final.
+ */
+const GameOverScreen = ({ players, onRestart }) => {
+    const { playSound } = React.useContext(AudioContext);
+    const sortedPlayers = useMemo(() => [...players].sort((a, b) => b.score - a.score), [players]);
+    const winner = sortedPlayers[0];
+
+    useEffect(() => {
+        // Toca o som de game over ao montar
+        // playSound('game_over'); // Já está sendo tocado no QuizScreen antes da transição
+    }, [playSound]);
+
+    return (
+        <div className="w-full max-w-2xl mx-auto p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-3xl border border-gray-200 dark:border-slate-700 text-center relative overflow-hidden animate-fade-in">
+            {/* Confetti effect (aprimorado via CSS) */}
+            <div className="confetti-container">
+                <div className="confetti"></div>
+                <div className="confetti-2"></div>
+                <div className="confetti-3"></div>
+            </div>
+
+            <TrophyIcon />
+            <h2 className="text-3xl font-bold text-yellow-500 dark:text-yellow-400 mt-4 drop-shadow-md">Fim do Desafio!</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mt-2">Parabéns ao grande campeão:</p>
+            <h3 className="text-4xl font-bold text-teal-600 dark:text-teal-400 my-4 animate-score-pop drop-shadow-lg">🏁 {winner.name} 🏁</h3>
+            <p className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">{winner.score} pontos!</p>
+            
+            <div className="w-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-700 dark:to-slate-900 p-6 rounded-xl shadow-inner mt-8 z-10 relative border border-blue-100 dark:border-slate-600">
+                <h4 className="text-2xl font-bold mb-4 text-blue-800 dark:text-blue-300">Placar Final</h4>
+                <ul className="space-y-2 text-left">
+                    {sortedPlayers.map((player, index) => (
+                        <li key={index} className={`flex justify-between items-center p-3 rounded-md transition-all duration-300 ${index === 0 ? 'bg-yellow-100 dark:bg-yellow-900/50 font-bold text-yellow-800 dark:text-yellow-200 shadow-md' : 'bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-200'} border ${index === 0 ? 'border-yellow-200 dark:border-yellow-700' : 'border-gray-200 dark:border-slate-700'}`}>
+                            <span className="flex items-center">
+                                {index === 0 && <StarIcon className="text-yellow-500 mr-2" />}
+                                {index + 1}. {player.name}
+                            </span>
+                            <span className="font-bold text-lg">{player.score} pts</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <button onClick={() => { playSound('click'); onRestart(); }} className="mt-8 btn-primary-animated z-10 relative">
+                Jogar Novamente!
+            </button>
+        </div>
+    );
+};
+
+// =====================================================================
+// Função auxiliar para renderizar o estado do jogo
+// =====================================================================
+const renderGameState = (gameState, players, handleSetupComplete, handleQuizEnd, handleRestart) => {
+    switch (gameState) {
+        case 'quiz': return <QuizScreen players={players} onQuizEnd={handleQuizEnd} />;
+        case 'gameover': return <GameOverScreen players={players} onRestart={handleRestart} />;
+        default: return <PlayerSetup onSetupComplete={handleSetupComplete} />;
+    }
+};
+
+// =====================================================================
+// COMPONENTE PRINCIPAL DA APLICAÇÃO
+// Gerencia o estado do jogo (setup, quiz, gameover) e renderiza
+// o componente apropriado.
+// =====================================================================
+export default function App() {
+    const [gameState, setGameState] = useState('setup'); // 'setup', 'quiz', 'gameover'
+    const [players, setPlayers] = useState([]);
+
+    const handleSetupComplete = (playerData) => { setPlayers(playerData); setGameState('quiz'); };
+    const handleQuizEnd = (finalPlayers) => { setPlayers(finalPlayers); setGameState('gameover'); };
+    const handleRestart = () => { setPlayers([]); setGameState('setup'); };
+
+    return (
+        <AudioProvider> {/* Provedor de Contexto de Áudio */}
+            <div className="bg-slate-50 dark:bg-slate-900 min-h-screen w-full flex flex-col items-center justify-center p-4 font-sans text-gray-900 dark:text-gray-100">
+                {/* Estilos CSS globais para Tailwind e animações */}
+                <style>{`
+                    body {
+                        font-family: 'Inter', sans-serif; /* Usando Inter para todo o corpo */
+                        @apply bg-slate-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100;
+                    }
+
+                    /* Botão primário com animação */
+                    .btn-primary-animated {
+                        @apply inline-flex items-center justify-center px-8 py-4 rounded-full font-bold text-lg whitespace-nowrap
+                               bg-gradient-to-r from-teal-500 to-green-600 text-white shadow-lg
+                               transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl
+                               focus:outline-none focus:ring-4 focus:ring-teal-500/50 dark:focus:ring-teal-400/50
+                               relative overflow-hidden;
+                        background-size: 200% auto;
+                    }
+                    .btn-primary-animated:hover {
+                        background-position: right center;
+                    }
+                    .btn-primary-animated:active {
+                        transform: scale(0.98);
+                        box-shadow: 0 0 10px rgba(0,0,0,0.3) inset;
+                    }
+
+                    /* Botão secundário com animação */
+                    .btn-secondary-animated {
+                        @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-base whitespace-nowrap
+                               bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 shadow-md
+                               transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg
+                               focus:outline-none focus:ring-4 focus:ring-gray-400/50 dark:focus:ring-slate-500/50
+                               border border-gray-300 dark:border-slate-600;
+                    }
+                    .btn-secondary-animated:hover {
+                        @apply bg-gray-300 dark:bg-slate-600;
+                    }
+                    .btn-secondary-animated:active {
+                        transform: scale(0.98);
+                        box-shadow: 0 0 8px rgba(0,0,0,0.2) inset;
+                    }
+
+                    /* Animações customizadas */
+                    @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+                    .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+
+                    @keyframes slide-in-left { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+                    .animate-slide-in-left { animation: slide-in-left 0.6s ease-out forwards; }
+
+                    @keyframes slide-in-right { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+                    .animate-slide-in-right { animation: slide-in-right 0.6s ease-out forwards; }
+
+                    @keyframes score-pop { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 15px currentColor; } 100% { transform: scale(1); opacity: 1; } }
+                    .animate-score-pop { animation: score-pop 0.6s ease-in-out; }
+
+                    @keyframes score-pop-individual { 0% { transform: scale(1); } 50% { transform: scale(1.1); color: #2dd4bf; } 100% { transform: scale(1); } }
+                    .animate-score-pop-individual { animation: score-pop-individual 0.4s ease-in-out; }
+
+                    @keyframes bounce-subtle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+                    .animate-bounce-subtle { animation: bounce-subtle 1.8s ease-in-out infinite; }
+
+                    @keyframes pulse-fast { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+                    .animate-pulse-fast { animation: pulse-fast 0.5s ease-in-out infinite; }
+
+                    @keyframes pulse-subtle { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+                    .animate-pulse-subtle { animation: pulse-subtle 1.5s ease-in-out infinite; }
+
+                    @keyframes shake {
+                        0%, 100% { transform: translateX(0); }
+                        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                        20%, 40%, 60%, 80% { transform: translateX(5px); }
+                    }
+                    .animate-shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+
+                    @keyframes float-up {
+                        0% { transform: translateY(0) scale(1); opacity: 1; }
+                        100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+                    }
+                    .animate-float-up { animation: float-up 1s ease-out forwards; }
+
+                    @keyframes pop-in {
+                        0% { transform: scale(0.8); opacity: 0; }
+                        80% { transform: scale(1.05); opacity: 1; }
+                        100% { transform: scale(1); opacity: 1; }
+                    }
+                    .animate-pop-in { animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
+
+                    /* Efeito Confetti (aprimorado com múltiplos) */
+                    .confetti-container {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        overflow: hidden;
+                        pointer-events: none;
+                        z-index: 0;
+                    }
+                    .confetti, .confetti-2, .confetti-3 {
+                        position: absolute;
+                        width: 15px; /* Tamanho do confetti */
+                        height: 15px;
+                        opacity: 0;
+                        animation: confetti-fall 8s linear infinite;
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        transform-origin: center;
+                    }
+
+                    .confetti {
+                        background-image: url('data:image/svg+xml;utf8,<svg width="15" height="15" viewBox="0 0 22 10" xmlns="http://www.w3.org/2000/svg"><path d="M0 6.5C0 6.5 2.222 7.833 6.667 6.5 11.111 5.167 13.333 0 13.333 0S15.556 5.167 20 6.5c4.444 1.333 2 3.5 2 3.5H0V6.5z" fill="%232dd4bf"/></svg>'); /* Teal */
+                        animation-delay: 0s;
+                        left: 10%;
+                        transform: scale(0.8);
+                    }
+                    .confetti-2 {
+                        background-image: url('data:image/svg+xml;utf8,<svg width="15" height="15" viewBox="0 0 22 10" xmlns="http://www.w3.org/2000/svg"><path d="M0 6.5C0 6.5 2.222 7.833 6.667 6.5 11.111 5.167 13.333 0 13.333 0S15.556 5.167 20 6.5c4.444 1.333 2 3.5 2 3.5H0V6.5z" fill="%23f97316"/></svg>'); /* Orange */
+                        animation-delay: 2s;
+                        left: 40%;
+                        transform: scale(1.2);
+                    }
+                    .confetti-3 {
+                        background-image: url('data:image/svg+xml;utf8,<svg width="15" height="15" viewBox="0 0 22 10" xmlns="http://www.w3.org/2000/svg"><path d="M0 6.5C0 6.5 2.222 7.833 6.667 6.5 11.111 5.167 13.333 0 13.333 0S15.556 5.167 20 6.5c4.444 1.333 2 3.5 2 3.5H0V6.5z" fill="%23a855f7"/></svg>'); /* Purple */
+                        animation-delay: 4s;
+                        left: 70%;
+                        transform: scale(0.9);
+                    }
+
+                    @keyframes confetti-fall {
+                        0% { transform: translateY(-100px) rotate(0deg) scale(0.5); opacity: 0; }
+                        10% { opacity: 1; }
+                        100% { transform: translateY(120vh) rotate(720deg) scale(1.5); opacity: 0; }
+                    }
+
+                    /* Custom Scrollbar for Player Setup */
+                    .custom-scrollbar {
+                        scrollbar-width: thin;
+                        scrollbar-color: #a8a8a8 #f1f1f1;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar {
+                        width: 8px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-track {
+                        background: #f1f1f1;
+                        border-radius: 10px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-thumb {
+                        background: #a8a8a8;
+                        border-radius: 10px;
+                        border: 2px solid #f1f1f1;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                        background: #888;
+                    }
+                `}</style>
+                {renderGameState(gameState, players, handleSetupComplete, handleQuizEnd, handleRestart)}
+            </div>
+        </AudioProvider>
+    );
+}

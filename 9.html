@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolução Contínua</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Variáveis de Cores e Fontes */
+        :root {
+            --aa-green: #16B097;
+            --aa-dark-blue: #1C2E42;
+            --aa-light-gray: #AEB0B2;
+            --aa-medium-gray: #6c7a89;
+            --aa-white: #FFFFFF;
+            --aa-black: #000000;
+            --aa-green-darker: #0F8A7E;
+            --aa-green-text-dark-theme: #2DD4BF;
+            --aa-green-lighter: #D2F3EC;
+            --aa-green-pastel: #f0fdfa;
+            --aa-dark-blue-lighter: #2C4A6B;
+            --arremaq-orange: #FF8C00;
+            --arremaq-orange-darker: #D97706;
+            --arremaq-orange-text-dark-theme: #FDBA74;
+            --arremaq-orange-lighter: #FFD073;
+            --arremaq-orange-pastel: #fffbeb;
+            --arremaq-orange-darkest: #6b3e00;
+            --aa-green-darkest: #17575c;
+            --aa-shiny-gray-light: #E5E7EB;
+            --aa-shiny-gray-dark: #374151;
+            --font-headings-cover: 'Manrope', sans-serif;
+            --font-body-cover: 'Manrope', sans-serif;
+            --font-primary-portal: 'Manrope', sans-serif;
+            --font-headings-portal: 'Sora', sans-serif;
+            --bg-main-light: var(--aa-green-pastel);
+            --bg-main-dark: #0a121c;
+            --bg-content-light-portal: var(--aa-white);
+            --bg-content-dark-portal: #1e293b;
+            --bg-cards-section-light: #f0f4f8;
+            --bg-cards-section-dark: #111827;
+            --text-headings-light-portal: var(--aa-dark-blue);
+            --text-headings-dark-portal: var(--aa-green-lighter);
+            --text-body-light-portal: #334155;
+            --text-body-dark-portal: #cbd5e1;
+            --text-muted-light-portal: #616161;
+            --text-muted-dark-portal: #94a3b8;
+            --border-color-light-portal: #e2e8f0;
+            --border-color-dark-portal: #334155;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+            --radius-card-portal: 1.25rem;
+            --radius-button-portal: 0.75rem;
+            --radius-round: 9999px;
+            --transition-main: .25s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* Estilos Globais */
+        html { scroll-behavior: smooth; font-family: var(--font-body-cover); font-size: 91%; }
+        body { margin: 0; font-family: var(--font-body-cover); background-color: var(--bg-main-light); color: var(--text-body-light-portal); overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; line-height: 1.7; }
+        html[data-theme='dark'] body { background-color: var(--bg-main-dark); color: var(--text-body-dark-portal); }
+        .hidden { display: none !important; }
+        .emoji-original-color { -webkit-text-fill-color: initial; text-fill-color: initial; background: none; display: inline-block; text-shadow: none; }
+        .text-aa-green-darker { color: var(--aa-green-darker) !important; -webkit-text-fill-color: var(--aa-green-darker) !important; text-fill-color: var(--aa-green-darker) !important; background: none !important; }
+        html[data-theme='dark'] .text-aa-green-darker { color: var(--aa-green-text-dark-theme) !important; -webkit-text-fill-color: var(--aa-green-text-dark-theme) !important; text-fill-color: var(--aa-green-text-dark-theme) !important; }
+        .text-arremaq-orange-darker { color: var(--arremaq-orange-darker) !important; -webkit-text-fill-color: var(--arremaq-orange-darker) !important; text-fill-color: var(--arremaq-orange-darker) !important; background: none !important; }
+        html[data-theme='dark'] .text-arremaq-orange-darker { color: var(--arremaq-orange-text-dark-theme) !important; -webkit-text-fill-color: var(--arremaq-orange-text-dark-theme) !important; text-fill-color: var(--arremaq-orange-text-dark-theme) !important; }
+
+        /* Estilos específicos da seção */
+        .playbook-sub-section { padding-top: 2rem; padding-bottom: 2rem; background-color: var(--bg-main-light); min-height: 100vh; }
+        html[data-theme='dark'] .playbook-sub-section { background-color: var(--bg-main-dark); }
+        .playbook-content-title { font-family: var(--font-headings-portal); font-size: clamp(1.5rem, 3.2vw, 2rem); font-weight: 700; color: var(--text-headings-light-portal); margin-bottom: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); text-align: center;}
+        html[data-theme='dark'] .playbook-content-title { color: var(--text-headings-dark-portal); }
+        .playbook-content-title .emoji { font-size: 1.1em; margin-right: 0.6rem; color: var(--aa-green); }
+        html[data-theme='dark'] .playbook-content-title .emoji { color: var(--aa-green-lighter); }
+        .playbook-sub-section p { margin-bottom: 1rem; line-height: 1.8; font-size: 0.85rem; color: var(--text-body-light-portal); }
+        html[data-theme='dark'] .playbook-sub-section p { color: var(--text-body-dark-portal); }
+        .navigation-buttons { display: flex; justify-content: space-between; margin-top: 3rem; }
+        .btn-nav { padding: 0.7rem 1.5rem; border-radius: var(--radius-lg); font-weight: 700; transition: all var(--transition-main); border: 2px solid transparent; text-transform: uppercase; box-shadow: var(--shadow-sm); font-size: 0.8rem; }
+        .btn-nav:hover{ box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .btn-nav.prev { background-color: var(--text-muted-light-portal); color: var(--aa-white); border-color: var(--aa-dark-blue); }
+        .btn-nav.prev:hover { background-color: var(--aa-dark-blue); }
+        html[data-theme='dark'] .btn-nav.prev { background-color: var(--text-muted-dark-portal); color: var(--bg-main-dark); border-color: var(--aa-green-lighter); }
+        html[data-theme='dark'] .btn-nav.prev:hover { background-color: var(--aa-green-lighter); color: var(--aa-dark-blue); }
+        .btn-nav.next { background-color: var(--aa-green); color: var(--aa-white); border-color: var(--aa-green-darker); }
+        .btn-nav.next:hover { background-color: var(--aa-green-darker); }
+        html[data-theme='dark'] .btn-nav.next { background-color: var(--arremaq-orange-lighter); color: var(--aa-dark-blue); border-color: var(--arremaq-orange); }
+        html[data-theme='dark'] .btn-nav.next:hover { background-color: var(--arremaq-orange); color: var(--aa-white); }
+        .btn-nav.disabled { background-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; opacity: 0.7; border-color: #cbd5e1; }
+        html[data-theme='dark'] .btn-nav.disabled { background-color: #334155; color: #64748b; border-color: #475569; }
+        
+        .btn-voltar-secao { display: inline-flex; align-items: center; font-family: var(--font-headings-cover); font-weight: 600; padding: 0.6rem 1.2rem; border-radius: var(--radius-button-portal); text-decoration: none; transition: all var(--transition-main); border: 2px solid var(--aa-green); background-color: transparent; color: var(--aa-green-darker); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; }
+        .btn-voltar-secao:hover { background-color: var(--aa-green-lighter); border-color: var(--aa-green-darker); transform: translateY(-2px); color: var(--aa-green-darker); }
+        html[data-theme='dark'] .btn-voltar-secao { border-color: var(--aa-green-lighter); color: var(--aa-green-lighter); }
+        html[data-theme='dark'] .btn-voltar-secao:hover { background-color: var(--aa-dark-blue-lighter); border-color: var(--aa-green-lighter); color: var(--aa-white); }
+        .btn-voltar-secao i { margin-right: 0.5rem; }
+
+        .theme-toggle-button { position: fixed; bottom: 20px; right: 20px; background-color: var(--bg-content-light-portal); color: var(--text-headings-light-portal); border: 1px solid var(--border-color-light-portal); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow-lg); z-index: 1000; transition: all var(--transition-main); }
+        .theme-toggle-button:hover { transform: scale(1.1); color: var(--aa-green); }
+        html[data-theme='dark'] .theme-toggle-button { background-color: var(--bg-content-dark-portal); color: var(--text-headings-dark-portal); border-color: var(--border-color-dark-portal); }
+        html[data-theme='dark'] .theme-toggle-button:hover { color: var(--aa-green-lighter); }
+        .accessibility-controls { position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1001; }
+        .accessibility-btn { background-color: var(--bg-content-light-portal); color: var(--text-headings-light-portal); border: 1px solid var(--border-color-light-portal); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow-md); transition: all var(--transition-main); }
+        .accessibility-btn:hover { transform: scale(1.1); color: var(--aa-green); }
+        html[data-theme='dark'] .accessibility-btn { background-color: var(--bg-content-dark-portal); color: var(--text-headings-dark-portal); border-color: var(--border-color-dark-portal); }
+        html[data-theme='dark'] .accessibility-btn:hover { color: var(--aa-green-lighter); }
+
+        /* Estilos para lista com data-emoji (CORREÇÃO APLICADA AQUI) */
+        ul.playbook-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .icp-list-item {
+            position: relative;
+            padding-left: 2.8rem; /* AUMENTADO para dar mais espaço ao emoji */
+            line-height: 1.6;
+            font-size: 0.9rem;
+            color: var(--text-body-light-portal);
+            display: flex;
+            align-items: flex-start; /* Alinha o texto ao topo do item */
+        }
+        html[data-theme='dark'] .icp-list-item {
+            color: var(--text-body-dark-portal);
+        }
+        .icp-list-item::before {
+            content: attr(data-emoji);
+            position: absolute;
+            left: 0;
+            top: 0.1rem; /* Ajustado para alinhar com o topo do texto */
+            /* Removido transform: translateY(-50%) para alinhar com flex-start */
+            font-size: 1.4rem;
+            line-height: 1;
+            -webkit-text-fill-color: initial;
+            text-fill-color: initial;
+            background: none;
+            text-shadow: none;
+        }
+
+        /* Estilos para interação Gemini */
+        .gemini-interaction-box { border: 1px solid var(--border-color-light-portal); }
+        html[data-theme='dark'] .gemini-interaction-box { border-color: var(--border-color-dark-portal); }
+        .gemini-feature-title { color: var(--aa-dark-blue); }
+        html[data-theme='dark'] .gemini-feature-title { color: var(--aa-green-lighter); }
+        .gemini-sparkle { color: var(--aa-green); }
+        html[data-theme='dark'] .gemini-sparkle { color: var(--aa-green-lighter); }
+        .gemini-textarea { resize: vertical; }
+        .btn-gemini-action { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-primary-portal); font-weight: 600; padding: 0.75rem 1.5rem; border-radius: var(--radius-button-portal); background-color: var(--aa-green); color: var(--aa-white); border: none; cursor: pointer; transition: all var(--transition-main); box-shadow: var(--shadow-md); }
+        .btn-gemini-action:hover { background-color: var(--aa-green-darker); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        html[data-theme='dark'] .btn-gemini-action { background-color: var(--aa-green-lighter); color: var(--aa-dark-blue); }
+        html[data-theme='dark'] .btn-gemini-action:hover { background-color: var(--aa-green); color: var(--aa-white); }
+        .gemini-result-box { border: 1px solid var(--aa-green-darker); }
+        html[data-theme='dark'] .gemini-result-box { border-color: var(--aa-green-text-dark-theme); }
+
+        .highlight { background-color: #e8f5e9; border-left-color: #4caf50; }
+        html[data-theme='dark'] .highlight { background-color: #1b5e20; border-left-color: #a5d6a7; }
+        .text-green-900 { color: #1b5e20; }
+        html[data-theme='dark'] .text-green-900 { color: #a5d6a7; }
+
+        /* Media Queries para Responsividade */
+        @media (max-width: 1024px) { 
+            .playbook-content-title { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+            .playbook-sub-section p { font-size: 0.7rem; }
+        }
+        @media (max-width: 768px) {
+            html { font-size: 84%; } 
+            .playbook-content-title { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+            .playbook-sub-section p { font-size: 0.7rem; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 77%; } 
+            .playbook-content-title { font-size: clamp(1rem, 2.8vw, 1.5rem); }
+            .playbook-sub-section p { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controles de Acessibilidade -->
+    <div class="accessibility-controls">
+        <button id="increaseFontBtn" class="accessibility-btn" aria-label="Aumentar tamanho da fonte" title="Aumentar Fonte">
+            <i class="fas fa-search-plus"></i>
+        </button>
+        <button id="decreaseFontBtn" class="accessibility-btn" aria-label="Diminuir tamanho da fonte" title="Diminuir Fonte">
+            <i class="fas fa-search-minus"></i>
+        </button>
+        <button id="readPageBtn" class="accessibility-btn" aria-label="Ler página em voz alta" title="Ler Página">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+
+    <main id="main-portal-completo">
+        <!-- Conteúdo da Seção Evolução Contínua -->
+        <section id="playbook-sec-9-content-main" class="playbook-sub-section" data-aos="fade-up">
+            <div class="container mx-auto">
+                <button class="btn-voltar-secao backToManualPitStopDetalhesBtn mb-8 text-sm">
+                    <i class="fas fa-arrow-left mr-2"></i> VOLTAR AO GUIA ESTRATÉGICO
+                </button>
+                <h2 class="playbook-content-title text-center"><span class="emoji-original-color">📈</span><strong>EVOLUÇÃO CONTÍNUA: NOSSO PLAYBOOK <span class="text-aa-green-darker">AUTO ARREMATE</span> & <span class="text-arremaq-orange-darker">ARREMAQ</span> EM CONSTANTE APERFEIÇOAMENTO!</strong></h2>
+                <div class="text-content-container playbook-text space-y-10 mt-8">
+                    <section id="intro-melhoria-continua" data-aos="fade-up">
+                        <h3 class="playbook-section-title !text-center" style="text-transform: uppercase;">
+                            <span class="emoji">📈</span> <strong>UM GUIA QUE ACELERA COM VOCÊ: SEMPRE EM APERFEIÇOAMENTO!</strong>
+                        </h3>
+                        <p><span class="sentence-emoji">🛠️</span>Um Guia Estratégico de Vendas verdadeiramente épico, digno da Copa Pistão, nunca está finalizado com uma última bandeirada. <span class="sentence-emoji">🔄</span>Ele é um organismo vivo, um carro de corrida que está sempre no box recebendo upgrades, que respira as mudanças do mercado (novas pistas, novos adversários), aprende com cada batalha vencida (e também com os pneus furados no caminho) e se fortalece com o conhecimento coletivo da nossa legião de campeões (vocês!).</p>
+                        <p><span class="sentence-emoji">✨</span>Este capítulo é o nosso pacto com a evolução constante, como um veículo aprendendo novas manobras com seu mentor. <span class="sentence-emoji">🗺️</span>Aqui delineamos os próximos pit stops para enriquecer este manual, as futuras "peças turbo" que serão adicionadas e como VOCÊ, nobre guerreiro(a) das vendas, é peça fundamental nesse processo de aprimoramento, como um engenheiro chefe trazendo novas ideias para a equipe!</p>
+                    </section>
+
+                    <hr class="my-10 border-t-2 border-gray-200 dark:border-gray-700">
+
+                    <section id="proximos-capitulos" data-aos="fade-up">
+                        <h3 class="playbook-section-title !text-center" style="text-transform: uppercase;">
+                            <span class="emoji">🗺️</span> <strong>AS PRÓXIMAS VOLTAS DA NOSSA SAGA (EM BREVE, NOVOS CIRCUITOS NO GUIA!):</strong>
+                        </h3>
+                        <ul class="playbook-list grid md:grid-cols-2 gap-6 mt-4">
+                            <li data-emoji="⚙️" class="icp-list-item !items-start bg-gray-50 dark:bg-slate-800 p-4 rounded-lg shadow"><strong>CAPÍTULO II - A PISTA AUTOMÁTICA (AUTOMAÇÃO NO HUBSPOT):</strong> Um guia detalhado, com mapas e tudo, sobre como traduzir os fluxos de prospecção em Workflows poderosos no HubSpot, otimizando cada etapa da jornada do cliente, como um carro autônomo superinteligente. (Esqueleto conceitual já na garagem!).</li>
+                            <li data-emoji="🔮" class="icp-list-item !items-start bg-gray-50 dark:bg-slate-800 p-4 rounded-lg shadow"><strong>CAPÍTULO III - A CAÇA AO TESOURO (PROSPECÇÃO AVANÇADA):</strong> Estratégias para encontrar minas de ouro de leads (clientes valiosos), incluindo o uso de APIs de prospecção (ferramentas de detetive) e a arte de construir listas validadas, como encontrar um atalho desconhecido para a vitória. (Projeto já no túnel de vento!).</li>
+                            <li data-emoji="🐉" class="icp-list-item !items-start bg-gray-50 dark:bg-slate-800 p-4 rounded-lg shadow"><strong>CAPÍTULO IV - OS OLHOS DO SUPERVISOR (KPIS E TELEMETRIA AVANÇADA):</strong> Mergulhe nas métricas que realmente importam (os dados da telemetria do carro) e descubra como a Inteligência Artificial pode transformar dados em previsões e insights acionáveis em tempo real, como ter um supervisor analisando cada volta. (Motor já em desenvolvimento!).</li>
+                            <li data-emoji="🤖" class="icp-list-item !items-start bg-gray-50 dark:bg-slate-800 p-4 rounded-lg shadow"><strong>CAPÍTULO VI - OS AMIGOS ROBÔS (CHATBOT E CHAMADA DE VOZ):</strong> Conceituação e planejamento para assistentes digitais (como um assistente virtual das vendas!) que amplificarão nosso alcance e eficiência, respondendo dúvidas e agendando pit stops automaticamente. (Ideias já borbulhando no tanque de combustível!).</li>
+                        </ul>
+                    </section>
+
+                    <hr class="my-10 border-t-2 border-gray-200 dark:border-gray-700">
+                    
+                    <section id="forja-ideias-ia" class="gemini-interaction-box bg-blue-50 dark:bg-blue-900/30 p-6 rounded-lg shadow-lg" data-aos="fade-up">
+                        <h3 class="playbook-section-title !text-center gemini-feature-title" style="font-size: 1.5rem; color: var(--accent-tertiary); text-transform: uppercase;">
+                            <span class="gemini-sparkle" style="font-size: 1.5em;">💡</span> A GARAGEM DE IDEIAS TURBINADAS (IA): SUA VOZ NA EVOLUÇÃO!
+                        </h3>
+                        <p class="text-center mt-2 mb-4"><span class="sentence-emoji">🗣️</span> Sua experiência no campo de batalha, nas pistas mais desafiadoras, é inestimável, campeão! <span class="sentence-emoji">🏆</span>Que novos feitiços (funcionalidades), táticas de ultrapassagem ou capítulos você acredita que tornariam este Guia Estratégico ainda mais poderoso que um motor de alta performance? <span class="sentence-emoji">✍️</span>Use a ferramenta abaixo para compartilhar suas ideias geniais com o Grande Conselho de Engenheiros e Estrategistas da Auto Arremate. As melhores sugestões serão incorporadas em futuras atualizações, com direito a troféu e tudo!</p>
+                        <textarea id="ideiaPlaybook" class="gemini-textarea w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white" rows="4" placeholder="Descreva sua ideia genial para turbinar o Guia EstratégICO... (Ex: um novo tipo de pneu para chuva, uma estratégia para economizar combustível, etc.)"></textarea>
+                        <button class="btn-gemini-action BotaoEnviarIdeia mt-4 w-full md:w-auto">
+                            <span class="gemini-sparkle">💡</span> ENVIAR IDEIA ILUMINADA PARA O BOX!
+                        </button>
+                        <div id="confirmacaoIdeiaResultado" class="gemini-result-box hidden mt-4 p-3 bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-100 rounded-md"></div>
+                    </section>
+
+                    <hr class="my-10 border-t-2 border-gray-200 dark:border-gray-700">
+
+                    <section id="ciclos-revisao" data-aos="fade-up">
+                        <h3 class="playbook-section-title !text-center" style="text-transform: uppercase;">
+                            <span class="emoji">🔄</span> <strong>PIT STOPS PROGRAMADOS: CICLOS DE REVISÃO E ATUALIZAÇÃO!</strong>
+                        </h3>
+                        <p class="mb-4"><span class="sentence-emoji">🗓️</span> Este Guia Estratégico passará por revisões e atualizações periódicas (ex: trimestralmente), como um carro de corrida que volta ao box para ajustes finos, para incorporar:</p>
+                        <ul class="playbook-list grid md:grid-cols-2 gap-4">
+                            <li data-emoji="📊" class="icp-list-item">Novos aprendizados e melhores táticas de pilotagem identificadas pela equipe nas pistas.</li>
+                            <li data-emoji="✨" class="icp-list-item">Feedback e sugestões dos usuários (vocês, nossos pilotos de elite!).</li>
+                            <li data-emoji="📈" class="icp-list-item">Mudanças no regulamento da corrida (mercado), nos nossos modelos de carros (produtos) ou nas estratégias dos adversários.</li>
+                            <li data-emoji="🛠️" class="icp-list-item">Novas ferramentas e tecnologias que possam otimizar nosso desempenho e nos dar mais cavalos de potência.</li>
+                        </ul>
+                        <p class="mt-4"><span class="sentence-emoji">🔔</span> Fique atento aos comunicados da torre de comando sobre novas versões e atualizações! Queremos que você tenha sempre o carro mais rápido e o mapa mais preciso!</p>
+                    </section>
+
+                    <div class="highlight bg-green-50 dark:bg-green-900/60 border-l-8 border-green-500 dark:border-green-400 rounded-r-xl p-8 shadow-2xl text-left md:text-justify leading-relaxed mt-10" data-aos="fade-up">
+                        <p class="text-lg md:text-xl text-green-900 dark:text-green-100">
+                            <strong class="block text-2xl md:text-3xl mb-4 font-bold text-center tracking-wider"><span class="emoji">🚀</span> JUNTOS, RUMO AO PÓDIO INFINITO!</strong>
+                            <span class="sentence-emoji">🤝</span>Com sua ajuda e nossa dedicação, faremos deste Guia EstratégICO uma lenda viva, um farol de sabedoria que guiará a Auto Arremate® e Arremaq® a conquistas cada vez maiores, deixando um rastro de vitórias por todas as pistas! <span class="sentence-emoji">🏆</span>Katchau!
+                        </p>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="btn-nav prev navigateToPlaybookSection" data-target="playbook-sec-8-content-main">❮ DICIONÁRIO DOS MESTRES</button>
+                    <button class="btn-nav next navigateToPlaybookSection" data-target="playbook-sec-10-content-main">CENTRAL DE COMANDO (CONTATO) ❯</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botão flutuante para alternar tema -->
+    <button id="themeToggleBtn" class="theme-toggle-button" aria-label="Alternar tema" title="Alternar Tema">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Script AOS (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({ duration: 700, once: true, offset: 50 });
+
+            // Referências aos elementos da página
+            const playbookSec9ContentMain = document.getElementById('playbook-sec-9-content-main');
+            const allPlaybookSubSections = document.querySelectorAll('.playbook-sub-section');
+            
+            // Controles de Acessibilidade
+            const htmlEl = document.documentElement;
+            const increaseFontBtn = document.getElementById('increaseFontBtn');
+            const decreaseFontBtn = document.getElementById('decreaseFontBtn');
+            const readPageBtn = document.getElementById('readPageBtn');
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const moonIcon = '<i class="fas fa-moon"></i>';
+            const sunIcon = '<i class="fas fa-sun"></i>';
+            const FONT_STEP_PERCENT = 10;
+            const MIN_HTML_FONT_PERCENT = 60;
+            const MAX_HTML_FONT_PERCENT = 140;
+            const synth = window.speechSynthesis;
+            let isReading = false;
+            let utterance = null;
+
+            // Função para mostrar uma seção específica e ocultar todas as outras
+            function showSection(sectionToShow) {
+                allPlaybookSubSections.forEach(s => {
+                    if (s && s !== sectionToShow) s.classList.add('hidden');
+                });
+                if (sectionToShow) {
+                    sectionToShow.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    AOS.refreshHard();
+                }
+            }
+
+            // Lógica para alternar o tema (claro/escuro)
+            function applyTheme(theme) {
+                htmlEl.setAttribute('data-theme', theme);
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
+                }
+            }
+            let storedTheme = null;
+            try { storedTheme = localStorage.getItem('theme'); } catch (e) { console.warn("LocalStorage não disponível para persistência do tema.");}
+            const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            applyTheme(storedTheme || preferredTheme);
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    applyTheme(newTheme);
+                    try { localStorage.setItem('theme', newTheme); } catch (e) { console.warn("LocalStorage não está disponível para persistência do tema."); }
+                });
+            }
+
+            // Controles de Acessibilidade de Fonte
+            function getCurrentHtmlFontSizePercent() {
+                const currentSizePx = parseFloat(window.getComputedStyle(htmlEl).fontSize);
+                const browserBaseSizePx = 16;
+                return (currentSizePx / browserBaseSizePx) * 100;
+            }
+            if (increaseFontBtn) {
+                increaseFontBtn.addEventListener('click', () => {
+                    let currentPercent = getCurrentHtmlFontSizePercent();
+                    let newPercent = currentPercent + FONT_STEP_PERCENT;
+                    htmlEl.style.fontSize = Math.min(newPercent, MAX_HTML_FONT_PERCENT) + '%';
+                });
+            }
+            if (decreaseFontBtn) {
+                decreaseFontBtn.addEventListener('click', () => {
+                    let currentPercent = getCurrentHtmlFontSizePercent();
+                    let newPercent = currentPercent - FONT_STEP_PERCENT;
+                    htmlEl.style.fontSize = Math.max(newPercent, MIN_HTML_FONT_PERCENT) + '%';
+                });
+            }
+
+            // Leitura de Voz (Text-to-Speech)
+            if (readPageBtn && synth) {
+                readPageBtn.addEventListener('click', () => {
+                    if (synth.speaking) { synth.cancel(); return; }
+                    let activeSection = playbookSec9ContentMain; // Apenas esta seção para leitura neste arquivo
+                    
+                    if (!activeSection) {
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Nenhuma seção ativa encontrada para leitura.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        return;
+                    }
+                    
+                    let textToRead = "";
+                    activeSection.querySelectorAll('h1, h2, h3, h4, p, li').forEach(el => {
+                        if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE') {
+                            textToRead += el.textContent.replace(/<br>/gi, ' ').trim() + ". ";
+                        }
+                    });
+                    
+                    if (textToRead.trim() === "") {
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Nenhum texto principal encontrado para leitura na seção atual.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        return;
+                    }
+                    
+                    utterance = new SpeechSynthesisUtterance(textToRead.replace(/\s+/g, ' ').trim());
+                    utterance.lang = 'pt-BR';
+                    utterance.onstart = () => { readPageBtn.innerHTML = '<i class="fas fa-stop-circle"></i>'; };
+                    utterance.onend = () => { readPageBtn.innerHTML = '<i class="fas fa-volume-up"></i>'; };
+                    utterance.onerror = () => { readPageBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Erro ao tentar ler a página.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        utterance = null;
+                    };
+                    synth.speak(utterance);
+                });
+            } else if (readPageBtn) {
+                readPageBtn.style.display = 'none';
+                console.warn("Web Speech API (SpeechSynthesis) não é suportada neste navegador.");
+            }
+
+            // Funções de navegação de seção (apenas como placeholders aqui, pois este é um arquivo autocontido)
+            document.querySelectorAll('.navigateToPlaybookSection').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const targetId = e.currentTarget.getAttribute('data-target');
+                    console.log(`Navegar para a seção: ${targetId}. (Em um sistema completo, essa seção seria carregada/mostrada aqui)`);
+                    allPlaybookSubSections.forEach(sec => sec.classList.add('hidden'));
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) targetSection.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+            document.querySelectorAll('.backToManualPitStopDetalhesBtn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    console.log(`Voltando ao guia estratégico. (Em um sistema completo, essa seção seria carregada/mostrada aqui)`);
+                });
+            });
+
+
+            // --- Funcionalidade Específica do Gemini ---
+            const ideiaPlaybookInput = document.getElementById('ideiaPlaybook');
+            const botaoEnviarIdeia = document.querySelector('.BotaoEnviarIdeia');
+            const confirmacaoIdeiaResultado = document.getElementById('confirmacaoIdeiaResultado');
+
+            if (botaoEnviarIdeia) {
+                botaoEnviarIdeia.addEventListener('click', async () => {
+                    if (!ideiaPlaybookInput || !ideiaPlaybookInput.value.trim()) {
+                        if (confirmacaoIdeiaResultado) {
+                            confirmacaoIdeiaResultado.innerHTML = 'Por favor, digite sua ideia antes de enviar.';
+                            confirmacaoIdeiaResultado.style.display = 'block';
+                            confirmacaoIdeiaResultado.classList.remove('bg-green-100', 'dark:bg-green-700', 'text-green-700', 'dark:text-green-100');
+                            confirmacaoIdeiaResultado.classList.add('bg-red-100', 'dark:bg-red-700', 'text-red-700', 'dark:text-red-100');
+                        }
+                        return;
+                    }
+
+                    const prompt = ideiaPlaybookInput.value;
+                    if (confirmacaoIdeiaResultado) {
+                        confirmacaoIdeiaResultado.innerHTML = 'Enviando ideia...';
+                        confirmacaoIdeiaResultado.style.display = 'block';
+                        confirmacaoIdeiaResultado.classList.remove('bg-red-100', 'dark:bg-red-700', 'text-red-700', 'dark:text-red-100');
+                        confirmacaoIdeiaResultado.classList.add('bg-blue-100', 'dark:bg-blue-700', 'text-blue-700', 'dark:text-blue-100');
+                    }
+
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // A API Key será fornecida pelo Canvas em tempo de execução
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(`Erro da API: ${response.status} - ${errorData.error.message}`);
+                        }
+
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            if (confirmacaoIdeiaResultado) {
+                                confirmacaoIdeiaResultado.innerHTML = `Ideia enviada! Recebemos sua sugestão: "${text.substring(0, 100)}..."`;
+                                confirmacaoIdeiaResultado.style.display = 'block';
+                                confirmacaoIdeiaResultado.classList.remove('bg-blue-100', 'dark:bg-blue-700', 'text-blue-700', 'dark:text-blue-100', 'bg-red-100', 'dark:bg-red-700', 'text-red-700', 'dark:text-red-100');
+                                confirmacaoIdeiaResultado.classList.add('bg-green-100', 'dark:bg-green-700', 'text-green-700', 'dark:text-green-100');
+                            }
+                            ideiaPlaybookInput.value = ''; // Limpa o input após o envio
+                        } else {
+                            throw new Error("Estrutura de resposta da API inesperada ou conteúdo ausente.");
+                        }
+                    } catch (error) {
+                        console.error("Erro ao chamar a API Gemini:", error);
+                        if (confirmacaoIdeiaResultado) {
+                            confirmacaoIdeiaResultado.innerHTML = `Ocorreu um erro: ${error.message}. Por favor, tente novamente.`;
+                            confirmacaoIdeiaResultado.style.display = 'block';
+                            confirmacaoIdeiaResultado.classList.remove('bg-green-100', 'dark:bg-green-700', 'text-green-700', 'dark:text-green-100', 'bg-blue-100', 'dark:bg-blue-700', 'text-blue-700', 'dark:text-blue-100');
+                            confirmacaoIdeiaResultado.classList.add('bg-red-100', 'dark:bg-red-700', 'text-red-700', 'dark:text-red-100');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canais de Contato</title>
+    <!-- Fontes Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- AOS (Animate On Scroll) para animações de rolagem -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Variáveis de Cores e Fontes (Consolidadas e Ajustadas) */
+        :root {
+            --aa-green: #16B097; /* Verde principal da Auto Arremate */
+            --aa-dark-blue: #1C2E42; /* Azul escuro principal */
+            --aa-light-gray: #AEB0B2; /* Cinza claro */
+            --aa-medium-gray: #6c7a89; /* Cinza médio */
+            --aa-white: #FFFFFF; /* Branco */
+            --aa-black: #000000; /* Preto */
+            --aa-green-darker: #0F8A7E; /* Verde mais escuro */
+            --aa-green-text-dark-theme: #2DD4BF; /* Verde para texto no tema escuro */
+            --aa-green-lighter: #D2F3EC; /* Verde mais claro */
+            --aa-green-pastel: #f0fdfa; /* Verde pastel */
+            --aa-dark-blue-lighter: #2C4A6B; /* Azul escuro mais claro */
+
+            --arremaq-orange: #FF8C00; /* Laranja principal da Arremaq */
+            --arremaq-orange-darker: #D97706; /* Laranja mais escuro */
+            --arremaq-orange-text-dark-theme: #FDBA74; /* Laranja para texto no tema escuro */
+            --arremaq-orange-lighter: #FFD073; /* Laranja mais claro */
+            --arremaq-orange-pastel: #fffbeb; /* Laranja pastel */
+            --arremaq-orange-darkest: #6b3e00; /* Laranja mais escuro */
+            
+            --aa-green-darkest: #17575c; /* Verde mais escuro */
+            --aa-shiny-gray-light: #E5E7EB; /* Cinza brilhante claro */
+            --aa-shiny-gray-dark: #374151; /* Cinza brilhante escuro */
+
+            /* Fontes */
+            --font-headings-cover: 'Manrope', sans-serif; /* Fonte para títulos da capa */
+            --font-body-cover: 'Manrope', sans-serif;    /* Fonte para corpo da capa */
+            --font-primary-portal: 'Manrope', sans-serif; /* Fonte primária do portal */
+            --font-headings-portal: 'Sora', sans-serif; /* Fonte para títulos do portal */
+
+            /* Fundos */
+            --bg-main-light: var(--aa-green-pastel); /* Fundo principal tema claro */
+            --bg-main-dark: #0a121c; /* Fundo principal tema escuro */
+            --bg-content-light-portal: var(--aa-white); /* Fundo de conteúdo tema claro */
+            --bg-content-dark-portal: #1e293b; /* Fundo de conteúdo tema escuro */
+            --bg-cards-section-light: #f0f4f8; /* Fundo para seção de cards tema claro */
+            --bg-cards-section-dark: #111827; /* Fundo para seção de cards tema escuro */
+
+            /* Textos */
+            --text-headings-light-portal: var(--aa-dark-blue); /* Cor dos títulos tema claro */
+            --text-headings-dark-portal: var(--aa-green-lighter); /* Cor dos títulos tema escuro */
+            --text-body-light-portal: #334155; /* Cor do corpo do texto tema claro */
+            --text-body-dark-portal: #cbd5e1; /* Cor do corpo do texto tema escuro */
+            --text-muted-light-portal: #616161; /* Cor do texto mudo tema claro */
+            --text-muted-dark-portal: #94a3b8; /* Cor do texto mudo tema escuro */
+            
+            /* Bordas */
+            --border-color-light-portal: #e2e8f0; /* Cor da borda tema claro */
+            --border-color-dark-portal: #334155; /* Cor da borda tema escuro */
+
+            /* Sombras */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            
+            /* Raios de Borda */
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+            --radius-card-portal: 1.25rem;
+            --radius-button-portal: 0.75rem;
+            --radius-round: 9999px;
+
+            --transition-main: .25s cubic-bezier(.4,0,.2,1);
+            --accent-tertiary: #1C2E42;
+            --text-on-accent: #FFFFFF;
+            --accent-danger: #ef4444;
+        }
+
+        /* Estilos Globais */
+        html { 
+            scroll-behavior: smooth; 
+            font-family: var(--font-body-cover); 
+            font-size: 91%;
+        }
+        body {
+            margin: 0;
+            font-family: var(--font-body-cover); 
+            background-color: var(--bg-main-light);
+            color: var(--text-body-light-portal);
+            overflow-x: hidden; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        html[data-theme='dark'] body {
+            background-color: var(--bg-main-dark);
+            color: var(--text-body-dark-portal);
+        }
+        .hidden { display: none !important; }
+        .emoji-original-color { -webkit-text-fill-color: initial; text-fill-color: initial; background: none; display: inline-block; text-shadow: none; }
+        .text-aa-green-darker { color: var(--aa-green-darker) !important; -webkit-text-fill-color: var(--aa-green-darker) !important; text-fill-color: var(--aa-green-darker) !important; background: none !important; }
+        html[data-theme='dark'] .text-aa-green-darker { color: var(--aa-green-text-dark-theme) !important; -webkit-text-fill-color: var(--aa-green-text-dark-theme) !important; text-fill-color: var(--aa-green-text-dark-theme) !important; }
+        .text-arremaq-orange-darker { color: var(--arremaq-orange-darker) !important; -webkit-text-fill-color: var(--arremaq-orange-darker) !important; text-fill-color: var(--arremaq-orange-darker) !important; background: none !important; }
+        html[data-theme='dark'] .text-arremaq-orange-darker { color: var(--arremaq-orange-text-dark-theme) !important; -webkit-text-fill-color: var(--arremaq-orange-text-dark-theme) !important; text-fill-color: var(--arremaq-orange-text-dark-theme) !important; }
+
+        /* Estilos da Seção */
+        .playbook-sub-section { padding: clamp(2rem, 8vw, 4rem) clamp(1rem, 5vw, 2rem); background-color: var(--bg-main-light); min-height: 100vh; }
+        html[data-theme='dark'] .playbook-sub-section { background-color: var(--bg-main-dark); }
+        .playbook-content-title { font-family: var(--font-headings-portal); font-size: clamp(1.5rem, 3.2vw, 2rem); font-weight: 700; color: var(--text-headings-light-portal); margin-bottom: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); text-align: center;}
+        html[data-theme='dark'] .playbook-content-title { color: var(--text-headings-dark-portal); }
+        .playbook-content-title .emoji { font-size: 1.1em; margin-right: 0.6rem; color: var(--aa-green); }
+        html[data-theme='dark'] .playbook-content-title .emoji { color: var(--aa-green-lighter); }
+        .playbook-text p { margin-bottom: 1rem; line-height: 1.8; font-size: 0.85rem; color: var(--text-body-light-portal); }
+        html[data-theme='dark'] .playbook-text p { color: var(--text-body-dark-portal); }
+        .navigation-buttons { display: flex; justify-content: space-between; margin-top: 3rem; }
+        .btn-nav { padding: 0.7rem 1.5rem; border-radius: var(--radius-lg); font-weight: 700; transition: all var(--transition-main); border: 2px solid transparent; text-transform: uppercase; box-shadow: var(--shadow-sm); font-size: 0.8rem; }
+        .btn-nav:hover{ box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .btn-nav.prev { background-color: var(--text-muted-light-portal); color: var(--aa-white); border-color: var(--aa-dark-blue); }
+        .btn-nav.prev:hover { background-color: var(--aa-dark-blue); }
+        html[data-theme='dark'] .btn-nav.prev { background-color: var(--text-muted-dark-portal); color: var(--bg-main-dark); border-color: var(--aa-green-lighter); }
+        html[data-theme='dark'] .btn-nav.prev:hover { background-color: var(--aa-green-lighter); color: var(--aa-dark-blue); }
+        .btn-nav.next { background-color: var(--aa-green); color: var(--aa-white); border-color: var(--aa-green-darker); }
+        .btn-nav.next:hover { background-color: var(--aa-green-darker); }
+        html[data-theme='dark'] .btn-nav.next { background-color: var(--arremaq-orange-lighter); color: var(--aa-dark-blue); border-color: var(--arremaq-orange); }
+        html[data-theme='dark'] .btn-nav.next:hover { background-color: var(--arremaq-orange); color: var(--aa-white); }
+        .btn-nav.disabled { background-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; opacity: 0.7; border-color: #cbd5e1; }
+        html[data-theme='dark'] .btn-nav.disabled { background-color: #334155; color: #64748b; border-color: #475569; }
+        
+        .btn-voltar-secao { display: inline-flex; align-items: center; font-family: var(--font-headings-cover); font-weight: 600; padding: 0.6rem 1.2rem; border-radius: var(--radius-button-portal); text-decoration: none; transition: all var(--transition-main); border: 2px solid var(--aa-green); background-color: transparent; color: var(--aa-green-darker); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; }
+        .btn-voltar-secao:hover { background-color: var(--aa-green-lighter); border-color: var(--aa-green-darker); transform: translateY(-2px); color: var(--aa-green-darker); }
+        html[data-theme='dark'] .btn-voltar-secao { border-color: var(--aa-green-lighter); color: var(--aa-green-lighter); }
+        html[data-theme='dark'] .btn-voltar-secao:hover { background-color: var(--aa-dark-blue-lighter); border-color: var(--aa-green-lighter); color: var(--aa-white); }
+        .btn-voltar-secao i { margin-right: 0.5rem; }
+
+        .theme-toggle-button { position: fixed; bottom: 20px; right: 20px; background-color: var(--bg-content-light-portal); color: var(--text-headings-light-portal); border: 1px solid var(--border-color-light-portal); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow-lg); z-index: 1000; transition: all var(--transition-main); }
+        .theme-toggle-button:hover { transform: scale(1.1); color: var(--aa-green); }
+        html[data-theme='dark'] .theme-toggle-button { background-color: var(--bg-content-dark-portal); color: var(--text-headings-dark-portal); border-color: var(--border-color-dark-portal); }
+        html[data-theme='dark'] .theme-toggle-button:hover { color: var(--aa-green-lighter); }
+        .accessibility-controls { position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1001; }
+        .accessibility-btn { background-color: var(--bg-content-light-portal); color: var(--text-headings-light-portal); border: 1px solid var(--border-color-light-portal); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow-md); transition: all var(--transition-main); }
+        .accessibility-btn:hover { transform: scale(1.1); color: var(--aa-green); }
+        html[data-theme='dark'] .accessibility-btn { background-color: var(--bg-content-dark-portal); color: var(--text-headings-dark-portal); border-color: var(--border-color-dark-portal); }
+        html[data-theme='dark'] .accessibility-btn:hover { color: var(--aa-green-lighter); }
+
+        /* Estilos para cards de canais de contato */
+        .contact-card {
+            background-color: var(--bg-content-light-portal);
+            border: 1px solid var(--border-color-light-portal);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-main);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Alinha o conteúdo à esquerda */
+            text-align: left;
+            height: 100%;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--aa-green);
+        }
+        html[data-theme='dark'] .contact-card {
+            background-color: var(--bg-content-dark-portal);
+            border-color: var(--border-color-dark-portal);
+        }
+        html[data-theme='dark'] .contact-card:hover {
+            border-color: var(--aa-green-lighter);
+        }
+        .contact-card-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+            line-height: 1;
+            color: var(--aa-green-darker); /* Cor para os ícones dos cards */
+        }
+        html[data-theme='dark'] .contact-card-icon {
+            color: var(--aa-green-text-dark-theme);
+        }
+        .contact-card-title {
+            font-family: var(--font-headings-portal);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-headings-light-portal);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        html[data-theme='dark'] .contact-card-title {
+            color: var(--text-headings-dark-portal);
+        }
+        .contact-card-detail {
+            font-size: 0.9rem;
+            color: var(--text-body-light-portal);
+            margin-bottom: 0.5rem;
+        }
+        html[data-theme='dark'] .contact-card-detail {
+            color: var(--text-body-dark-portal);
+        }
+        .contact-card-description {
+            font-size: 0.75rem;
+            color: var(--text-muted-light-portal);
+            line-height: 1.5;
+            margin-top: auto; /* Empurra para baixo se houver espaço */
+        }
+        html[data-theme='dark'] .contact-card-description {
+            color: var(--text-muted-dark-portal);
+        }
+        .contact-card-description .sentence-emoji {
+            margin-right: 0.3em;
+        }
+
+        /* Estilos para o container de texto */
+        .text-content-container {
+            padding: 1rem;
+            background-color: var(--bg-content-light-portal);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+        html[data-theme='dark'] .text-content-container {
+            background-color: var(--bg-content-dark-portal);
+        }
+
+        .highlight { background-color: #e8f5e9; border-left-color: #4caf50; }
+        html[data-theme='dark'] .highlight { background-color: #1b5e20; border-left-color: #a5d6a7; }
+        .text-blue-900 { color: #1a237e; } /* Original de 📞CENTRAL DE COMANDO */
+        html[data-theme='dark'] .text-blue-900 { color: #bbdefb; }
+
+        /* Media Queries para Responsividade */
+        @media (max-width: 1024px) { 
+            .playbook-content-title { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+            .playbook-text p { font-size: 0.7rem; }
+            .contact-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 768px) {
+            html { font-size: 84%; } 
+            .playbook-content-title { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+            .playbook-text p { font-size: 0.7rem; }
+            .contact-cards-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 77%; } 
+            .playbook-content-title { font-size: clamp(1rem, 2.8vw, 1.5rem); }
+            .playbook-text p { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controles de Acessibilidade (Tamanho da Fonte e Leitura de Página) -->
+    <div class="accessibility-controls">
+        <button id="increaseFontBtn" class="accessibility-btn" aria-label="Aumentar tamanho da fonte" title="Aumentar Fonte">
+            <i class="fas fa-search-plus"></i>
+        </button>
+        <button id="decreaseFontBtn" class="accessibility-btn" aria-label="Diminuir tamanho da fonte" title="Diminuir Fonte">
+            <i class="fas fa-search-minus"></i>
+        </button>
+        <button id="readPageBtn" class="accessibility-btn" aria-label="Ler página em voz alta" title="Ler Página">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+
+    <main id="main-portal-completo">
+        <!-- Conteúdo da Seção Central de Comando (Contato e Suporte) -->
+        <section id="playbook-sec-10-content-main" class="playbook-sub-section" data-aos="fade-up">
+            <div class="container mx-auto">
+                <button class="btn-voltar-secao mb-8 text-sm" onclick="alert('Voltar ao Guia Estratégico')"> <!-- Placeholder -->
+                    <i class="fas fa-arrow-left mr-2"></i> VOLTAR AO GUIA ESTRATÉGICO
+                </button>
+                <h2 class="playbook-content-title text-center"><span class="emoji-original-color" style="color: var(--aa-green);">📞</span><strong>CENTRAL DE COMANDO (CONTATO E SUPORTE): SEU RÁDIO DIRETO COM A EQUIPE!</strong></h2>
+                <div class="text-content-container playbook-text space-y-10 mt-8">
+                    <section id="canais-contato-direto" data-aos="fade-up">
+                        <h3 class="playbook-section-title !text-center" style="text-transform: uppercase;">
+                            <span class="emoji">📡</span> <strong>SEUS CANAIS DIRETOS COM A EQUIPE DE BOX!</strong>
+                        </h3>
+                        <p class="mb-4"><span class="sentence-emoji">🎙️</span> Para garantir que você esteja sempre conectado com a nossa equipe de suporte e liderança, utilize os seguintes canais. Lembre-se, cada canal tem sua especialidade, como um mecânico diferente para cada parte do veículo!</p>
+                        
+                        <div class="contact-cards-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Card: E-mail -->
+                            <div class="contact-card" data-aos="fade-up" data-aos-delay="100">
+                                <span class="contact-card-icon"><i class="fas fa-envelope"></i></span>
+                                <h4 class="contact-card-title">E-mail (Para Dúvidas Estratégicas e Sugestões):</h4>
+                                <p class="contact-card-detail">
+                                    <a href="mailto:liderancacomercial@autoarremate.com.br" class="text-aa-green-darker hover:underline">liderancacomercial@autoarremate.com.br</a>
+                                </p>
+                                <p class="contact-card-description">
+                                    <span class="sentence-emoji">💡</span> Ideal para questões que precisam de uma análise mais profunda ou sugestões de melhoria para o Guia.
+                                </p>
+                            </div>
+
+                            <!-- Card: Telefone -->
+                            <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+                                <span class="contact-card-icon"><i class="fas fa-phone-alt"></i></span>
+                                <h4 class="contact-card-title">Telefone (Para Suporte Urgente em Campo):</h4>
+                                <p class="contact-card-detail">
+                                    <a href="tel:01640421197" class="text-aa-green-darker hover:underline">016 4042-1197</a> (Ramal: XXXX)
+                                </p>
+                                <p class="contact-card-description">
+                                    <span class="sentence-emoji">⚡</span> Para situações que exigem resposta rápida durante uma negociação ou problema crítico.
+                                </p>
+                            </div>
+
+                            <!-- Card: Grupo de WhatsApp -->
+                            <div class="contact-card" data-aos="fade-up" data-aos-delay="300">
+                                <span class="contact-card-icon"><i class="fab fa-whatsapp"></i></span>
+                                <h4 class="contact-card-title">Grupo de WhatsApp "Estrategistas AAR" (Para Troca Rápida de Pneus):</h4>
+                                <p class="contact-card-detail">
+                                    <span class="text-aa-green-darker">Acesse via convite do seu gestor.</span>
+                                </p>
+                                <p class="contact-card-description">
+                                    <span class="sentence-emoji">💬</span> Para comunicação ágil com a equipe, compartilhamento de insights e dúvidas rápidas.
+                                </p>
+                            </div>
+
+                            <!-- Card: Plataforma de Suporte -->
+                            <div class="contact-card" data-aos="fade-up" data-aos-delay="400">
+                                <span class="contact-card-icon"><i class="fas fa-laptop-code"></i></span>
+                                <h4 class="contact-card-title">Plataforma de Suporte (Para Ajustes no Motor da Plataforma):</h4>
+                                <p class="contact-card-detail">
+                                    <span class="text-aa-green-darker">Disponível dentro da plataforma Auto Arremate/Arremaq.</span>
+                                </p>
+                                <p class="contact-card-description">
+                                    <span class="sentence-emoji">⚙️</span> Para dúvidas técnicas, bugs ou problemas de usabilidade da plataforma.
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="mt-8 text-center italic text-gray-600 dark:text-gray-400">
+                            <span class="sentence-emoji">🏆</span> Nosso compromisso é com respostas rápidas e soluções eficazes para manter você sempre na liderança da pista!
+                        </p>
+                    </section>
+
+                    <div class="highlight bg-blue-50 dark:bg-blue-900/60 border-l-8 border-blue-500 dark:border-blue-400 rounded-r-xl p-8 shadow-2xl text-left md:text-justify leading-relaxed mt-10" data-aos="fade-up">
+                        <p class="text-lg md:text-xl text-blue-900 dark:text-blue-100">
+                            <strong class="block text-2xl md:text-3xl mb-4 font-bold text-center tracking-wider"><span class="emoji">🏁</span> CONECTADO É MAIS RÁPIDO!</strong>
+                            <span class="sentence-emoji">🚀</span>Nunca hesite em usar seus canais de comunicação, campeão! <span class="sentence-emoji">🤝</span>Sua equipe de box está sempre pronta para dar o suporte necessário, seja para um ajuste fino no motor ou para uma estratégia de última hora. <span class="sentence-emoji">🏆</span>Juntos, cruzaremos a linha de chegada! Katchau!
+                        </p>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="btn-nav prev" onclick="alert('Navegar para Evolução Contínua')"> <!-- Placeholder -->
+                        ❮ EVOLUÇÃO CONTÍNUA
+                    </button>
+                    <button class="btn-nav next" onclick="alert('Navegar para Engenharia Interna')"> <!-- Placeholder -->
+                        ENGENHARIA INTERNA ❯
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botão flutuante para alternar tema (opcional) -->
+    <button id="themeToggleBtn" class="theme-toggle-button" aria-label="Alternar tema" title="Alternar Tema">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Script AOS (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({ duration: 700, once: true, offset: 50 });
+
+            // Controles de Acessibilidade
+            const htmlEl = document.documentElement;
+            const increaseFontBtn = document.getElementById('increaseFontBtn');
+            const decreaseFontBtn = document.getElementById('decreaseFontBtn');
+            const readPageBtn = document.getElementById('readPageBtn');
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const moonIcon = '<i class="fas fa-moon"></i>';
+            const sunIcon = '<i class="fas fa-sun"></i>';
+            const FONT_STEP_PERCENT = 10;
+            const MIN_HTML_FONT_PERCENT = 60;
+            const MAX_HTML_FONT_PERCENT = 140;
+            const synth = window.speechSynthesis;
+            let isReading = false;
+            let utterance = null;
+
+            // Lógica para alternar o tema (claro/escuro)
+            function applyTheme(theme) {
+                htmlEl.setAttribute('data-theme', theme);
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
+                }
+            }
+            let storedTheme = null;
+            try { storedTheme = localStorage.getItem('theme'); } catch (e) { console.warn("LocalStorage não disponível para persistência do tema.");}
+            const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            applyTheme(storedTheme || preferredTheme);
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    applyTheme(newTheme);
+                    try { localStorage.setItem('theme', newTheme); } catch (e) { console.warn("LocalStorage não está disponível para persistência do tema."); }
+                });
+            }
+
+            // Controles de Acessibilidade de Fonte
+            function getCurrentHtmlFontSizePercent() {
+                const currentSizePx = parseFloat(window.getComputedStyle(htmlEl).fontSize);
+                const browserBaseSizePx = 16;
+                return (currentSizePx / browserBaseSizePx) * 100;
+            }
+            if (increaseFontBtn) {
+                increaseFontBtn.addEventListener('click', () => {
+                    let currentPercent = getCurrentHtmlFontSizePercent();
+                    let newPercent = currentPercent + FONT_STEP_PERCENT;
+                    htmlEl.style.fontSize = Math.min(newPercent, MAX_HTML_FONT_PERCENT) + '%';
+                });
+            }
+            if (decreaseFontBtn) {
+                decreaseFontBtn.addEventListener('click', () => {
+                    let currentPercent = getCurrentHtmlFontSizePercent();
+                    let newPercent = currentPercent - FONT_STEP_PERCENT;
+                    htmlEl.style.fontSize = Math.max(newPercent, MIN_HTML_FONT_PERCENT) + '%';
+                });
+            }
+
+            // Leitura de Voz (Text-to-Speech)
+            if (readPageBtn && synth) {
+                readPageBtn.addEventListener('click', () => {
+                    if (synth.speaking) { synth.cancel(); return; }
+                    let activeSection = document.getElementById('playbook-sec-10-content-main'); // Apenas esta seção para leitura
+                    
+                    if (!activeSection) {
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Nenhuma seção ativa encontrada para leitura.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        return;
+                    }
+                    
+                    let textToRead = "";
+                    // Exclui elementos de interação Gemini, se presentes
+                    const elementsToExclude = ['.gemini-interaction-box', '.gemini-loading', '.gemini-output-area', '.gemini-error-area'];
+                    activeSection.querySelectorAll('h1, h2, h3, h4, p, li').forEach(el => {
+                        let shouldExclude = false;
+                        for (const selector of elementsToExclude) {
+                            if (el.closest(selector)) {
+                                shouldExclude = true;
+                                break;
+                            }
+                        }
+                        if (!shouldExclude && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE') {
+                            textToRead += el.textContent.replace(/<br>/gi, ' ').trim() + ". ";
+                        }
+                    });
+                    
+                    if (textToRead.trim() === "") {
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Nenhum texto principal encontrado para leitura na seção atual.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        return;
+                    }
+                    
+                    utterance = new SpeechSynthesisUtterance(textToRead.replace(/\s+/g, ' ').trim());
+                    utterance.lang = 'pt-BR';
+                    utterance.onstart = () => { readPageBtn.innerHTML = '<i class="fas fa-stop-circle"></i>'; };
+                    utterance.onend = () => { readPageBtn.innerHTML = '<i class="fas fa-volume-up"></i>'; };
+                    utterance.onerror = () => { readPageBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        const modal = document.createElement('div');
+                        modal.innerHTML = `<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;"><div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"><p>Erro ao tentar ler a página.</p><button onclick="this.parentNode.parentNode.remove()" style="margin-top: 15px; padding: 8px 15px; background-color: var(--aa-green); color: white; border: none; border-radius: 5px; cursor: pointer;">OK</button></div></div>`;
+                        document.body.appendChild(modal);
+                        utterance = null;
+                    };
+                    synth.speak(utterance);
+                });
+            } else if (readPageBtn) {
+                readPageBtn.style.display = 'none';
+                console.warn("Web Speech API (SpeechSynthesis) não é suportada neste navegador.");
+            }
+        });
+    </script>
+</body>
+</html>
