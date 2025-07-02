@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trilha de Aprendizagem Gamificada Auto Arremate & Arremaq - Jornada do Campeão">
+    <meta name="keywords" content="Auto Arremate, Arremaq, trilha aprendizagem, gamificação, treinamento comercial">
+    <title>Trilha de Aprendizagem Gamificada - Jornada do Campeão | Auto Arremate & Arremaq</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js para Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-trophy"></i>
+                <h2>Jornada do Campeão</h2>
+            </div>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="loadingText">Preparando sua experiência...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Header Navigation -->
+    <header id="globalHeader" class="global-header hidden" role="banner">
+        <nav class="header-nav" role="navigation" aria-label="Navegação principal">
+            <div class="header-brand">
+                <button id="brandLogo" class="brand-logo-btn" data-readable="Voltar ao início">
+                    <i class="fas fa-trophy"></i>
+                    <span class="brand-text">
+                        <span class="brand-aa">Auto Arremate</span> & 
+                        <span class="brand-arremaq">Arremaq</span>
+                    </span>
+                </button>
+            </div>
+            
+            <div class="header-user-info">
+                <div class="user-progress">
+                    <div class="user-level">
+                        <i class="fas fa-star"></i>
+                        <span>Nível <span id="userLevel">1</span></span>
+                    </div>
+                    <div class="user-xp">
+                        <i class="fas fa-bolt"></i>
+                        <span><span id="userXP">0</span> XP</span>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button id="notificationsBtn" class="header-btn" data-readable="Notificações" aria-label="Notificações">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationBadge">3</span>
+                    </button>
+                    
+                    <button id="profileBtn" class="header-btn" data-readable="Perfil do usuário" aria-label="Perfil">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    
+                    <button id="themeToggle" class="header-btn theme-toggle" data-readable="Alternar tema" aria-label="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Progress Bar Global -->
+        <div class="global-progress">
+            <div class="progress-track">
+                <div class="progress-fill" id="globalProgressFill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text" id="globalProgressText">0% Concluído</span>
+        </div>
+    </header>
+
+    <!-- Main Application Container -->
+    <main id="app" class="app-container" role="main">
+        
+        <!-- Home/Capa Section -->
+        <section id="capaSection" class="section capa-section" data-section="capa">
+            <div class="capa-content">
+                <div class="capa-animation">
+                    <div class="racing-track">
+                        <div class="car-icon"><i class="fas fa-car"></i></div>
+                    </div>
+                </div>
+                
+                <div class="logos-container">
+                    <img src="https://placehold.co/200x80/16B097/FFFFFF?text=AUTO+ARREMATE" alt="Auto Arremate" class="company-logo auto-arremate-logo" loading="lazy">
+                    <img src="https://placehold.co/200x80/FF8C00/FFFFFF?text=ARREMAQ" alt="Arremaq" class="company-logo arremaq-logo" loading="lazy">
+                </div>
+                
+                <h1 class="capa-title" data-readable="Título principal da trilha de aprendizagem">
+                    <span class="title-line">🏁 TRILHA DE APRENDIZAGEM GAMIFICADA</span>
+                    <span class="title-line">E IMERSIVA</span>
+                    <span class="title-line brand-highlight">
+                        <span class="text-aa-green">AUTO ARREMATE</span> & 
+                        <span class="text-arremaq-orange">ARREMAQ</span>
+                    </span>
+                    <span class="title-line subtitle">JORNADA DO CAMPEÃO</span>
+                </h1>
+                
+                <div class="capa-description">
+                    <p class="lead-text">
+                        🌟 Acelere seu potencial em uma experiência de aprendizado única, 
+                        onde cada conhecimento adquirido te leva mais perto da vitória!
+                    </p>
+                    <p class="secondary-text">
+                        🚀 Descubra estratégias vencedoras, domine ferramentas poderosas 
+                        e transforme-se no profissional campeão que você nasceu para ser.
+                    </p>
+                </div>
+                
+                <div class="capa-actions">
+                    <button id="startJourneyBtn" class="btn-primary btn-large" data-readable="Iniciar jornada do campeão">
+                        <i class="fas fa-flag-checkered"></i>
+                        <span>INICIAR JORNADA</span>
+                    </button>
+                    
+                    <button id="continueJourneyBtn" class="btn-secondary btn-large hidden" data-readable="Continuar jornada">
+                        <i class="fas fa-play"></i>
+                        <span>CONTINUAR</span>
+                    </button>
+                </div>
+                
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <span class="stat-number" data-target="847">0</span>
+                        <span class="stat-label">Campeões Ativos</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span class="stat-number" data-target="1205">0</span>
+                        <span class="stat-label">Missões Concluídas</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-medal"></i>
+                        <span class="stat-number" data-target="96">0</span>
+                        <span class="stat-label">% Satisfação</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Principal Section -->
+        <section id="menuSection" class="section menu-section hidden" data-section="menu">
+            <div class="menu-content">
+                <h2 class="section-title" data-readable="Menu principal de navegação">
+                    🎯 CENTRAL DE COMANDO
+                    <span class="subtitle">Escolha sua próxima missão</span>
+                </h2>
+                
+                <div class="menu-grid" id="menuGrid">
+                    <!-- Menu items will be populated by JavaScript -->
+                </div>
+                
+                <div class="achievement-showcase">
+                    <h3>🏆 Suas Conquistas Recentes</h3>
+                    <div class="recent-achievements" id="recentAchievements">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Playbook Section -->
+        <section id="playbookSection" class="section playbook-section hidden" data-section="playbook">
+            <div class="playbook-content">
+                <div class="playbook-header">
+                    <button class="btn-back" data-action="backToMenu" data-readable="Voltar ao menu">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+                    </button>
+                    
+                    <h2 class="section-title">
+                        📚 MANUAL DO PIT STOP
+                        <span class="subtitle">Guia Estratégico Completo</span>
+                    </h2>
+                </div>
+                
+                <div class="playbook-index" id="playbookIndex">
+                    <!-- Populated by JavaScript -->
+                </div>
+                
+                <div class="playbook-content-area" id="playbookContentArea">
+                    <!-- Dynamic content area -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Jornada do Cliente Section -->
+        <section id="jornadaSection" class="section jornada-section hidden" data-section="jornada">
+            <div class="jornada-content">
+                <div class="jornada-header">
+                    <button class="btn-back" data-action="backToMenu" data-readable="Voltar ao menu">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+                    </button>
+                    
+                    <h2 class="section-title">
+                        🗺️ JORNADA DO CLIENTE
+                        <span class="subtitle">Mapeamento de Experiências</span>
+                    </h2>
+                </div>
+                
+                <div class="jornada-overview">
+                    <p class="overview-text">
+                        Compreenda profundamente cada etapa da experiência dos nossos clientes 
+                        e torne-se um especialista em conduzir negócios de sucesso.
+                    </p>
+                </div>
+                
+                <div class="jornada-types" id="jornadaTypes">
+                    <!-- Populated by JavaScript -->
+                </div>
+                
+                <div class="jornada-detail-area" id="jornadaDetailArea">
+                    <!-- Dynamic content for detailed journey view -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Brand Book Section -->
+        <section id="brandSection" class="section brand-section hidden" data-section="brand">
+            <div class="brand-content">
+                <div class="brand-header">
+                    <button class="btn-back" data-action="backToMenu" data-readable="Voltar ao menu">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+                    </button>
+                    
+                    <h2 class="section-title">
+                        🎨 IDENTIDADE DE MARCA
+                        <span class="subtitle">Guia de Comunicação Visual</span>
+                    </h2>
+                </div>
+                
+                <div class="brand-guidelines" id="brandGuidelines">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Academia Section -->
+        <section id="academiaSection" class="section academia-section hidden" data-section="academia">
+            <div class="academia-content">
+                <div class="academia-header">
+                    <button class="btn-back" data-action="backToMenu" data-readable="Voltar ao menu">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+                    </button>
+                    
+                    <h2 class="section-title">
+                        🎓 ACADEMIA DE REPASSADORES
+                        <span class="subtitle">Centro de Excelência & IA</span>
+                    </h2>
+                </div>
+                
+                <div class="academia-tools" id="academiaTools">
+                    <!-- AI Tools and training content -->
+                </div>
+                
+                <div class="ai-interaction-area" id="aiInteractionArea">
+                    <!-- AI interaction interface -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quizSection" class="section quiz-section hidden" data-section="quiz">
+            <div class="quiz-content">
+                <div class="quiz-header">
+                    <button class="btn-back" data-action="backToMenu" data-readable="Voltar ao menu">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Menu
+                    </button>
+                    
+                    <h2 class="section-title">
+                        🏅 DESAFIO DO CONHECIMENTO
+                        <span class="subtitle">Quiz Gamificado Interativo</span>
+                    </h2>
+                </div>
+                
+                <div class="quiz-interface" id="quizInterface">
+                    <!-- Quiz game interface -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions">
+        <button id="accessibilityBtn" class="fab accessibility-fab" data-readable="Opções de acessibilidade" aria-label="Acessibilidade">
+            <i class="fas fa-universal-access"></i>
+        </button>
+        
+        <button id="helpBtn" class="fab help-fab" data-readable="Ajuda e suporte" aria-label="Ajuda">
+            <i class="fas fa-question-circle"></i>
+        </button>
+        
+        <button id="mentorBtn" class="fab mentor-fab" data-readable="Mentor pessoal de IA" aria-label="Mentor IA">
+            <i class="fas fa-robot"></i>
+        </button>
+    </div>
+
+    <!-- Accessibility Panel -->
+    <div id="accessibilityPanel" class="accessibility-panel hidden">
+        <div class="panel-header">
+            <h3>⚡ Acessibilidade</h3>
+            <button id="closeAccessibilityPanel" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="panel-content">
+            <div class="accessibility-controls">
+                <div class="control-group">
+                    <label>Tamanho da Fonte</label>
+                    <div class="font-controls">
+                        <button id="decreaseFontBtn" class="control-btn">A-</button>
+                        <button id="resetFontBtn" class="control-btn">A</button>
+                        <button id="increaseFontBtn" class="control-btn">A+</button>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <button id="toggleReadingMode" class="control-btn full-width">
+                        <i class="fas fa-book-reader"></i> Modo Leitura
+                    </button>
+                </div>
+                
+                <div class="control-group">
+                    <button id="textToSpeechBtn" class="control-btn full-width">
+                        <i class="fas fa-volume-up"></i> Ler em Voz Alta
+                    </button>
+                </div>
+                
+                <div class="control-group">
+                    <button id="highContrastBtn" class="control-btn full-width">
+                        <i class="fas fa-adjust"></i> Alto Contraste
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mentor Panel -->
+    <div id="mentorPanel" class="mentor-panel hidden">
+        <div class="panel-header">
+            <h3>🤖 Mentor IA</h3>
+            <button id="closeMentorPanel" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="panel-content">
+            <div class="mentor-conversation" id="mentorConversation">
+                <div class="mentor-message">
+                    <div class="avatar">🤖</div>
+                    <div class="message">
+                        Olá, Campeão! Sou seu mentor pessoal de IA. Estou aqui para ajudar 
+                        você a maximizar sua jornada de aprendizado. Como posso te ajudar hoje?
+                    </div>
+                </div>
+            </div>
+            <div class="mentor-input">
+                <input type="text" id="mentorInput" placeholder="Digite sua pergunta...">
+                <button id="sendMentorMessage" class="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="toast-container">
+        <!-- Toasts will be dynamically added here -->
+    </div>
+
+    <!-- Achievement Modal -->
+    <div id="achievementModal" class="modal hidden">
+        <div class="modal-content achievement-modal-content">
+            <div class="achievement-animation">
+                <i class="fas fa-trophy achievement-icon"></i>
+            </div>
+            <h3 class="achievement-title" id="achievementTitle">Conquista Desbloqueada!</h3>
+            <p class="achievement-description" id="achievementDescription">Parabéns pelo seu progresso!</p>
+            <div class="achievement-reward">
+                <span class="xp-reward" id="achievementXP">+100 XP</span>
+            </div>
+            <button id="closeAchievementModal" class="btn-primary">Continuar</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="content.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
